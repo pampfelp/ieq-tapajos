@@ -59,33 +59,33 @@
 .ministry-tile:hover .photo-slot img{transform:scale(1.045);transition:transform .45s ease}.ministry-tile .photo-slot img{transition:transform .45s ease}
 .split-hero{min-height:567px}.split-hero .hero-copy{min-height:567px;padding:43px clamp(28px,3.7vw,56px)}.split-hero .hero-visual{min-height:567px}.split-hero .hero-visual .photo-slot{min-height:567px}
 .split-hero .hero-copy h1{font-size:clamp(70px,5.9vw,90px)}
-body[data-page="visita"] .split-hero .hero-copy{width:calc(100% + 50px);margin-right:-50px;clip-path:polygon(0 0,90% 0,90% 26%,100% 62%,100% 100%,0 100%);z-index:2}
-body[data-page="visita"] .split-hero .hero-visual .photo-slot img{object-position:center 43%}
-body[data-page="visita"] .three-steps,body[data-page="localizacao"] .three-steps{gap:0}.step{padding:28px 24px;border-right:1px solid var(--line);background:#fff;min-height:195px}.step:first-child{border-top:7px solid var(--coral)}.step:nth-child(2){border-top:7px solid var(--yellow)}.step:last-child{border-top:7px solid var(--blue)}
-body[data-page="horarios"] .split-hero{grid-template-columns:52% 48%;min-height:690px}
-body[data-page="horarios"] .split-hero .hero-copy{display:block;min-height:690px;padding-top:48px}
-body[data-page="horarios"] .split-hero .hero-copy h1{font-size:clamp(60px,5.6vw,83px);max-width:665px;margin-bottom:10px}
-body[data-page="horarios"] .split-hero .hero-copy .lead{font-size:20px;margin-bottom:5px}
-body[data-page="horarios"] .split-hero .button-row{display:none}
-body[data-page="horarios"] .split-hero .schedule-grid{margin-top:30px;gap:12px}
-body[data-page="horarios"] .split-hero .schedule-card{padding:19px 12px;min-height:203px;border-color:#d8dad8}
-body[data-page="horarios"] .split-hero .schedule-icon{width:48px;height:48px;margin-bottom:10px}
-body[data-page="horarios"] .split-hero .schedule-card h2{font-size:19px;margin-bottom:7px}
-body[data-page="horarios"] .split-hero .schedule-card strong{font-size:29px}
-body[data-page="horarios"] .split-hero .schedule-card p{font-size:13px}
-body[data-page="horarios"] .split-hero .hero-visual,body[data-page="horarios"] .split-hero .hero-visual .photo-slot{min-height:690px}
-body[data-page="horarios"] .split-hero .hero-visual .photo-slot img{object-position:center 52%}
+[data-main-page="visita"] .split-hero .hero-copy{width:calc(100% + 50px);margin-right:-50px;clip-path:polygon(0 0,90% 0,90% 26%,100% 62%,100% 100%,0 100%);z-index:2}
+[data-main-page="visita"] .split-hero .hero-visual .photo-slot img{object-position:center 43%}
+[data-main-page="visita"] .three-steps,[data-main-page="localizacao"] .three-steps{gap:0}.step{padding:28px 24px;border-right:1px solid var(--line);background:#fff;min-height:195px}.step:first-child{border-top:7px solid var(--coral)}.step:nth-child(2){border-top:7px solid var(--yellow)}.step:last-child{border-top:7px solid var(--blue)}
+[data-main-page="horarios"] .split-hero{grid-template-columns:52% 48%;min-height:690px}
+[data-main-page="horarios"] .split-hero .hero-copy{display:block;min-height:690px;padding-top:48px}
+[data-main-page="horarios"] .split-hero .hero-copy h1{font-size:clamp(60px,5.6vw,83px);max-width:665px;margin-bottom:10px}
+[data-main-page="horarios"] .split-hero .hero-copy .lead{font-size:20px;margin-bottom:5px}
+[data-main-page="horarios"] .split-hero .button-row{display:none}
+[data-main-page="horarios"] .split-hero .schedule-grid{margin-top:30px;gap:12px}
+[data-main-page="horarios"] .split-hero .schedule-card{padding:19px 12px;min-height:203px;border-color:#d8dad8}
+[data-main-page="horarios"] .split-hero .schedule-icon{width:48px;height:48px;margin-bottom:10px}
+[data-main-page="horarios"] .split-hero .schedule-card h2{font-size:19px;margin-bottom:7px}
+[data-main-page="horarios"] .split-hero .schedule-card strong{font-size:29px}
+[data-main-page="horarios"] .split-hero .schedule-card p{font-size:13px}
+[data-main-page="horarios"] .split-hero .hero-visual,[data-main-page="horarios"] .split-hero .hero-visual .photo-slot{min-height:690px}
+[data-main-page="horarios"] .split-hero .hero-visual .photo-slot img{object-position:center 52%}
 .hours-facade{height:210px;position:relative;overflow:hidden}.hours-facade .photo-slot{height:100%;min-height:0}.hours-facade .photo-slot img{object-position:center 53%}.hours-facade-label{position:absolute;right:0;top:0;bottom:0;width:34%;background:#222b2edd;color:#fff;display:grid;place-items:center;font-size:30px;font-weight:800;text-align:center;padding:25px}
-body[data-page="ministerios"] .page-intro{max-width:none;width:100%;padding:44px clamp(28px,3.7vw,56px) 32px;min-height:316px}
-body[data-page="ministerios"] .page-intro h1{font-size:clamp(67px,6vw,91px);max-width:980px;margin-bottom:9px}
-body[data-page="ministerios"] .page-intro .lead{font-size:22px}
-body[data-page="ministerios"] .dark-band{padding-top:58px;padding-bottom:58px}
-body[data-page="ministerios"] .dark-band .container{max-width:none;padding-inline:clamp(28px,3.7vw,56px)}
+[data-main-page="ministerios"] .page-intro{max-width:none;width:100%;padding:44px clamp(28px,3.7vw,56px) 32px;min-height:316px}
+[data-main-page="ministerios"] .page-intro h1{font-size:clamp(67px,6vw,91px);max-width:980px;margin-bottom:9px}
+[data-main-page="ministerios"] .page-intro .lead{font-size:22px}
+[data-main-page="ministerios"] .dark-band{padding-top:58px;padding-bottom:58px}
+[data-main-page="ministerios"] .dark-band .container{max-width:none;padding-inline:clamp(28px,3.7vw,56px)}
 .map-layout{grid-template-columns:34% 41% 25%;min-height:610px}.map-copy{padding:65px clamp(28px,3.7vw,56px);background:var(--paper)}.map-copy h1{font-size:clamp(65px,5.8vw,88px)}.map-copy .lead{font-size:22px}.map-copy>p:last-child{font-size:19px;font-weight:700}.map-card{min-height:610px}.map-panel{padding:76px 42px}.map-panel .eyebrow::before{background:var(--blue)}.map-panel .btn{min-height:53px}
 .contact-layout{grid-template-columns:32% 34% 34%;min-height:660px}.contact-copy{padding:52px clamp(28px,3.7vw,56px)}.contact-copy h1{font-size:clamp(62px,5.6vw,85px)}.contact-copy .lead{font-size:22px}.contact-channel{border-radius:0}.contact-visual .photo-slot{min-height:660px}.contact-visual .photo-slot img{object-position:center 35%}.contact-form-wrap{padding:52px clamp(28px,3.4vw,54px)}.contact-lower{display:grid;grid-template-columns:57% 43%;min-height:360px}.contact-lower-photo{min-height:360px}.contact-lower-info{padding:50px clamp(30px,5vw,85px);background:var(--dark);color:#fff}.contact-lower-info h2{font-size:48px}.contact-times{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:22px}.contact-times p{margin:0}.contact-times strong{display:block}
 @media(max-width:1120px){.home-hero{grid-template-columns:50% 50%;height:auto;min-height:0;overflow:visible}.home-hero .hero-copy{width:auto;margin:0;clip-path:none}.home-hero .home-info{grid-column:1/-1;height:auto;padding:28px 36px;display:grid;grid-template-columns:1fr 1fr}.home-facade{display:none}.home-info .info-block+.info-block{border-top:0;border-left:1px solid #626b6d;padding:0 0 0 26px}.home-info .info-block:last-child::before{margin-bottom:12px}.home-hero .hero-visual::before{left:0}.map-layout{grid-template-columns:42% 58%}.map-panel{grid-column:1/-1}.contact-layout{grid-template-columns:50% 50%}.contact-visual{display:none}}
-@media(max-width:800px){.nav-shell{min-height:82px;padding:8px 20px}.home-hero,.split-hero{display:flex;flex-direction:column;height:auto}.home-hero .hero-copy,.split-hero .hero-copy,body[data-page="visita"] .split-hero .hero-copy{height:auto;min-height:0;width:100%;margin:0;clip-path:none;padding:43px 24px 34px}.home-hero .hero-copy h1{white-space:normal;font-size:clamp(55px,8vw,76px)}.home-hero .hero-copy .lead{font-size:20px}.home-hero .hero-visual,.home-hero .hero-visual .photo-slot,.split-hero .hero-visual,.split-hero .hero-visual .photo-slot{height:410px;min-height:410px}.home-hero .home-info{display:grid;grid-template-columns:1fr 1fr;gap:20px}.ministry-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.ministry-label{padding:16px 25px}.map-layout{display:flex;flex-direction:column}.map-card{min-height:420px}.map-panel{display:block}.contact-layout{display:flex;flex-direction:column}.contact-visual{display:block}.contact-visual .photo-slot{height:390px;min-height:390px}.contact-lower{grid-template-columns:1fr}.contact-lower-photo{height:300px;min-height:300px}body[data-page="horarios"] .split-hero .hero-copy{min-height:0}body[data-page="horarios"] .split-hero .hero-visual,body[data-page="horarios"] .split-hero .hero-visual .photo-slot{height:400px;min-height:400px}body[data-page="ministerios"] .page-intro{min-height:0}body[data-page="ministerios"] .page-intro h1{font-size:clamp(55px,8vw,76px)}}
-@media(max-width:560px){.home-hero .hero-copy,.split-hero .hero-copy,body[data-page="visita"] .split-hero .hero-copy{padding:39px 20px 30px}.home-hero .hero-copy h1{font-size:clamp(50px,12vw,65px);white-space:normal}.home-hero .button-row .btn{min-width:0}.home-hero .home-info{grid-template-columns:1fr;padding:30px 24px;gap:0}.home-info .info-block+.info-block{border-left:0;border-top:1px solid #626b6d;padding:20px 0 0}.home-hero .hero-visual,.home-hero .hero-visual .photo-slot,.split-hero .hero-visual,.split-hero .hero-visual .photo-slot{height:360px;min-height:360px}.faith-row{margin-top:27px}.faith{font-size:8px;display:block;text-align:center;padding:0 4px;min-height:0}.faith .icon{width:34px;height:34px;margin:0 auto 5px}.ministry-strip{grid-template-columns:1fr}.ministry-tile .photo-slot{height:220px;min-height:220px}.ministry-label{min-height:124px;padding:18px 24px}.ministry-label h3{font-size:38px}.ministry-label p{font-size:15px}.map-copy{padding:45px 22px}.map-copy h1{font-size:clamp(54px,12vw,70px)}.map-card{min-height:350px}.map-panel{padding:34px 24px}body[data-page="horarios"] .split-hero .hero-copy h1{font-size:clamp(52px,12vw,69px)}body[data-page="horarios"] .split-hero .schedule-grid{grid-template-columns:1fr;gap:10px}body[data-page="horarios"] .split-hero .schedule-card{min-height:0;padding:16px;display:grid;grid-template-columns:48px 1fr;column-gap:13px;text-align:left}body[data-page="horarios"] .split-hero .schedule-icon{grid-row:1/4;margin:0}body[data-page="horarios"] .split-hero .schedule-card strong{font-size:26px}body[data-page="horarios"] .split-hero .schedule-card p{margin:4px 0 0}.hours-facade{height:180px}.hours-facade-label{width:50%;font-size:18px}body[data-page="ministerios"] .page-intro{padding:40px 20px 28px}body[data-page="ministerios"] .page-intro h1{font-size:clamp(50px,12vw,67px)}.contact-copy,.contact-form-wrap{padding:42px 22px}.contact-copy h1{font-size:clamp(54px,12vw,69px)}.contact-lower-info{padding:40px 24px}.contact-lower-info h2{font-size:39px}.step{padding:22px 0;background:transparent}.contact-channel .channel-title{font-size:20px}}
+@media(max-width:800px){.nav-shell{min-height:82px;padding:8px 20px}.home-hero,.split-hero{display:flex;flex-direction:column;height:auto}.home-hero .hero-copy,.split-hero .hero-copy,[data-main-page="visita"] .split-hero .hero-copy{height:auto;min-height:0;width:100%;margin:0;clip-path:none;padding:43px 24px 34px}.home-hero .hero-copy h1{white-space:normal;font-size:clamp(55px,8vw,76px)}.home-hero .hero-copy .lead{font-size:20px}.home-hero .hero-visual,.home-hero .hero-visual .photo-slot,.split-hero .hero-visual,.split-hero .hero-visual .photo-slot{height:410px;min-height:410px}.home-hero .home-info{display:grid;grid-template-columns:1fr 1fr;gap:20px}.ministry-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.ministry-label{padding:16px 25px}.map-layout{display:flex;flex-direction:column}.map-card{min-height:420px}.map-panel{display:block}.contact-layout{display:flex;flex-direction:column}.contact-visual{display:block}.contact-visual .photo-slot{height:390px;min-height:390px}.contact-lower{grid-template-columns:1fr}.contact-lower-photo{height:300px;min-height:300px}[data-main-page="horarios"] .split-hero .hero-copy{min-height:0}[data-main-page="horarios"] .split-hero .hero-visual,[data-main-page="horarios"] .split-hero .hero-visual .photo-slot{height:400px;min-height:400px}[data-main-page="ministerios"] .page-intro{min-height:0}[data-main-page="ministerios"] .page-intro h1{font-size:clamp(55px,8vw,76px)}}
+@media(max-width:560px){.home-hero .hero-copy,.split-hero .hero-copy,[data-main-page="visita"] .split-hero .hero-copy{padding:39px 20px 30px}.home-hero .hero-copy h1{font-size:clamp(50px,12vw,65px);white-space:normal}.home-hero .button-row .btn{min-width:0}.home-hero .home-info{grid-template-columns:1fr;padding:30px 24px;gap:0}.home-info .info-block+.info-block{border-left:0;border-top:1px solid #626b6d;padding:20px 0 0}.home-hero .hero-visual,.home-hero .hero-visual .photo-slot,.split-hero .hero-visual,.split-hero .hero-visual .photo-slot{height:360px;min-height:360px}.faith-row{margin-top:27px}.faith{font-size:8px;display:block;text-align:center;padding:0 4px;min-height:0}.faith .icon{width:34px;height:34px;margin:0 auto 5px}.ministry-strip{grid-template-columns:1fr}.ministry-tile .photo-slot{height:220px;min-height:220px}.ministry-label{min-height:124px;padding:18px 24px}.ministry-label h3{font-size:38px}.ministry-label p{font-size:15px}.map-copy{padding:45px 22px}.map-copy h1{font-size:clamp(54px,12vw,70px)}.map-card{min-height:350px}.map-panel{padding:34px 24px}[data-main-page="horarios"] .split-hero .hero-copy h1{font-size:clamp(52px,12vw,69px)}[data-main-page="horarios"] .split-hero .schedule-grid{grid-template-columns:1fr;gap:10px}[data-main-page="horarios"] .split-hero .schedule-card{min-height:0;padding:16px;display:grid;grid-template-columns:48px 1fr;column-gap:13px;text-align:left}[data-main-page="horarios"] .split-hero .schedule-icon{grid-row:1/4;margin:0}[data-main-page="horarios"] .split-hero .schedule-card strong{font-size:26px}[data-main-page="horarios"] .split-hero .schedule-card p{margin:4px 0 0}.hours-facade{height:180px}.hours-facade-label{width:50%;font-size:18px}[data-main-page="ministerios"] .page-intro{padding:40px 20px 28px}[data-main-page="ministerios"] .page-intro h1{font-size:clamp(50px,12vw,67px)}.contact-copy,.contact-form-wrap{padding:42px 22px}.contact-copy h1{font-size:clamp(54px,12vw,69px)}.contact-lower-info{padding:40px 24px}.contact-lower-info h2{font-size:39px}.step{padding:22px 0;background:transparent}.contact-channel .channel-title{font-size:20px}}
 
 @media(min-width:1121px){
   .home-hero .hero-copy h1{width:116%;transform:scaleX(.86);transform-origin:left center}
@@ -103,23 +103,23 @@ body[data-page="ministerios"] .dark-band .container{max-width:none;padding-inlin
 .map-pin:hover{scale:1.06;filter:brightness(1.05)}
 .map-pin::before{content:"";position:absolute;inset:8px;background:#fff;border-radius:50%}
 .map-pin img{position:relative;width:82px;height:auto;rotate:45deg;filter:brightness(.35)}
-body[data-page="localizacao"] .map-copy .eyebrow::before{display:none}
-body[data-page="localizacao"] .map-panel .info-line{margin-top:38px;margin-bottom:43px}
-body[data-page="localizacao"] .three-steps{gap:0}
-body[data-page="localizacao"] .step{grid-template-columns:115px 1fr;gap:24px;border-top:0;background:transparent;padding:18px 30px;min-height:158px}
-body[data-page="localizacao"] .step-num{display:none}
-body[data-page="localizacao"] .step .icon-disc{width:112px;height:112px;background:#f4f3f0;border:0}
-body[data-page="localizacao"] .step .icon{width:52px;height:52px;stroke-width:1.8}
-body[data-page="localizacao"] .step h3{margin:20px 0 6px;font-size:28px}
-body[data-page="localizacao"] .step p{font-size:20px}
-body[data-page="localizacao"] .step .text-link{display:none}
+[data-main-page="localizacao"] .map-copy .eyebrow::before{display:none}
+[data-main-page="localizacao"] .map-panel .info-line{margin-top:38px;margin-bottom:43px}
+[data-main-page="localizacao"] .three-steps{gap:0}
+[data-main-page="localizacao"] .step{grid-template-columns:115px 1fr;gap:24px;border-top:0;background:transparent;padding:18px 30px;min-height:158px}
+[data-main-page="localizacao"] .step-num{display:none}
+[data-main-page="localizacao"] .step .icon-disc{width:112px;height:112px;background:#f4f3f0;border:0}
+[data-main-page="localizacao"] .step .icon{width:52px;height:52px;stroke-width:1.8}
+[data-main-page="localizacao"] .step h3{margin:20px 0 6px;font-size:28px}
+[data-main-page="localizacao"] .step p{font-size:20px}
+[data-main-page="localizacao"] .step .text-link{display:none}
 .contact-lower-info{display:flex;flex-direction:column;justify-content:flex-start;padding:28px 55px;background:var(--dark)}
 .contact-lower-info .eyebrow{font-size:12px;letter-spacing:.36em;margin-bottom:17px}
 .contact-lower-info .info-line{padding:15px 0;border-bottom:1px solid #586267;font-size:19px}
 .contact-lower-info .info-line strong{font-size:18px}
 .contact-lower-info .icon-disc{width:55px;height:55px}
-@media(max-width:800px){.map-pin{width:108px;height:108px}.map-pin img{width:74px}body[data-page="localizacao"] .three-steps{display:grid;grid-template-columns:1fr}body[data-page="localizacao"] .step{grid-template-columns:82px 1fr;min-height:0;padding:22px 0;border-bottom:1px solid var(--line);border-right:0}body[data-page="localizacao"] .step .icon-disc{width:80px;height:80px}body[data-page="localizacao"] .step .icon{width:40px;height:40px}body[data-page="localizacao"] .step h3{margin:4px 0 6px}body[data-page="localizacao"] .step .text-link{display:inline-block}.contact-lower{grid-template-columns:1fr}.contact-lower-info{padding:34px 24px;min-height:270px}}
-body[data-page="localizacao"] .map-copy h1 .accent{display:block}
+@media(max-width:800px){.map-pin{width:108px;height:108px}.map-pin img{width:74px}[data-main-page="localizacao"] .three-steps{display:grid;grid-template-columns:1fr}[data-main-page="localizacao"] .step{grid-template-columns:82px 1fr;min-height:0;padding:22px 0;border-bottom:1px solid var(--line);border-right:0}[data-main-page="localizacao"] .step .icon-disc{width:80px;height:80px}[data-main-page="localizacao"] .step .icon{width:40px;height:40px}[data-main-page="localizacao"] .step h3{margin:4px 0 6px}[data-main-page="localizacao"] .step .text-link{display:inline-block}.contact-lower{grid-template-columns:1fr}.contact-lower-info{padding:34px 24px;min-height:270px}}
+[data-main-page="localizacao"] .map-copy h1 .accent{display:block}
 .contact-visual{position:relative;overflow:visible}
 .contact-visual::before,.contact-visual::after{content:"";position:absolute;z-index:2}
 .contact-visual::before{top:0;left:-22px;width:66px;height:130px;background:var(--blue)}
@@ -128,18 +128,18 @@ body[data-page="localizacao"] .map-copy h1 .accent{display:block}
 .contact-lower-info::after{content:"";position:absolute;right:0;top:0;width:49px;height:108px;background:var(--lilac)}
 @media(max-width:800px){.contact-visual::before{left:0;width:50px;height:85px}.contact-visual::after{right:0;width:60px;height:80px}.contact-lower-info::after{width:30px;height:80px}}
 @media(min-width:1121px){
-  body[data-page="horarios"] .split-hero{grid-template-columns:54% 46%;height:624px;min-height:624px;overflow:hidden}
-  body[data-page="horarios"] .split-hero .hero-copy{width:calc(100% + 45px);height:624px;min-height:624px;margin-right:-45px;z-index:3;padding-top:43px;clip-path:polygon(0 0,85% 0,85% 35%,100% 56%,100% 100%,0 100%)}
-  body[data-page="horarios"] .split-hero .hero-copy h1{font-size:clamp(72px,5.35vw,84px);line-height:1.02;letter-spacing:-.065em;white-space:nowrap;max-width:none;width:122%;transform:scaleX(.82);transform-origin:left center;margin-bottom:15px}
-  body[data-page="horarios"] .split-hero .hero-copy .lead{display:none}
-  body[data-page="horarios"] .split-hero .schedule-grid{width:calc(100% - 18px);margin-top:23px}
-  body[data-page="horarios"] .split-hero .schedule-card{height:225px;min-height:225px;padding:20px 12px}
-  body[data-page="horarios"] .split-hero .schedule-card p{display:none}
-  body[data-page="horarios"] .split-hero .schedule-card h2{font-size:24px;margin-bottom:12px}
-  body[data-page="horarios"] .split-hero .schedule-card strong{font-size:39px}
-  body[data-page="horarios"] .split-hero .schedule-icon{width:59px;height:59px;margin-bottom:10px}
-  body[data-page="horarios"] .split-hero .hero-visual,body[data-page="horarios"] .split-hero .hero-visual .photo-slot{height:624px;min-height:624px}
-  body[data-page="horarios"] .split-hero .hero-visual::before{left:-80px;width:66px}
+  [data-main-page="horarios"] .split-hero{grid-template-columns:54% 46%;height:624px;min-height:624px;overflow:hidden}
+  [data-main-page="horarios"] .split-hero .hero-copy{width:calc(100% + 45px);height:624px;min-height:624px;margin-right:-45px;z-index:3;padding-top:43px;clip-path:polygon(0 0,85% 0,85% 35%,100% 56%,100% 100%,0 100%)}
+  [data-main-page="horarios"] .split-hero .hero-copy h1{font-size:clamp(72px,5.35vw,84px);line-height:1.02;letter-spacing:-.065em;white-space:nowrap;max-width:none;width:122%;transform:scaleX(.82);transform-origin:left center;margin-bottom:15px}
+  [data-main-page="horarios"] .split-hero .hero-copy .lead{display:none}
+  [data-main-page="horarios"] .split-hero .schedule-grid{width:calc(100% - 18px);margin-top:23px}
+  [data-main-page="horarios"] .split-hero .schedule-card{height:225px;min-height:225px;padding:20px 12px}
+  [data-main-page="horarios"] .split-hero .schedule-card p{display:none}
+  [data-main-page="horarios"] .split-hero .schedule-card h2{font-size:24px;margin-bottom:12px}
+  [data-main-page="horarios"] .split-hero .schedule-card strong{font-size:39px}
+  [data-main-page="horarios"] .split-hero .schedule-icon{width:59px;height:59px;margin-bottom:10px}
+  [data-main-page="horarios"] .split-hero .hero-visual,[data-main-page="horarios"] .split-hero .hero-visual .photo-slot{height:624px;min-height:624px}
+  [data-main-page="horarios"] .split-hero .hero-visual::before{left:-80px;width:66px}
 }
 .hours-bottom{display:grid;grid-template-columns:61.5% 38.5%;height:220px;background:#fff}
 .hours-bottom .location-bar{width:100%;max-width:none;padding:20px clamp(28px,3.7vw,56px);display:grid;grid-template-columns:76px minmax(0,1fr) 200px;grid-template-rows:auto auto;gap:0 24px;align-content:center}
@@ -156,16 +156,11 @@ body[data-page="localizacao"] .map-copy h1 .accent{display:block}
 @media(max-width:1120px){.hours-bottom{grid-template-columns:1fr;height:auto}.hours-bottom .location-bar{display:flex;flex-wrap:wrap;gap:12px}.hours-bottom .hours-facade{height:220px}.hours-instagram{border-left:0;padding:0;width:100%}}
 @media(max-width:560px){.hours-bottom .location-bar h2{white-space:normal;font-size:27px}.hours-bottom .location-bar .btn{min-width:0}.hours-bottom .hours-facade{height:180px}}
 
-html.page-transitioning{overflow-x:clip}
-body.page-leave-forward{animation:page-leave-forward .28s ease-in both;pointer-events:none}
-body.page-leave-backward{animation:page-leave-backward .28s ease-in both;pointer-events:none}
-body.page-enter-forward{animation:page-enter-forward .38s cubic-bezier(.2,.7,.2,1) both}
-body.page-enter-backward{animation:page-enter-backward .38s cubic-bezier(.2,.7,.2,1) both}
-@keyframes page-leave-forward{to{transform:translate3d(-18vw,0,0);opacity:.35}}
-@keyframes page-leave-backward{to{transform:translate3d(18vw,0,0);opacity:.35}}
-@keyframes page-enter-forward{from{transform:translate3d(18vw,0,0);opacity:.65}}
-@keyframes page-enter-backward{from{transform:translate3d(-18vw,0,0);opacity:.65}}
-@media(prefers-reduced-motion:reduce){body.page-leave-forward,body.page-leave-backward,body.page-enter-forward,body.page-enter-backward{animation:none}}
+/* Troca de página como galeria: só cabeçalho, conteúdo e rodapé se movem; a pílula fica fixa na tela. */
+html.is-paging{overflow-x:clip}
+.page-peek{position:fixed;inset:0;z-index:30;overflow:hidden;background:var(--paper);visibility:hidden;pointer-events:none;transform:translate3d(100%,0,0)}
+.page-peek.is-active{visibility:visible}
+html.is-paging-settle .page-peek.is-active,html.is-paging-settle body>:is(.site-header,main,.site-footer){transition:transform .36s cubic-bezier(.22,.7,.2,1)}
 @media(max-width:800px){body.page-swipe-enabled{touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain}}
 
 /* A navegação fica sempre à vista; o fim do rodapé tem espaço para passar acima dela. */
