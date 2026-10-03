@@ -38,7 +38,7 @@
     }
     values={...values,...safeData};
     document.querySelectorAll('[data-content]').forEach(el=>{const key=el.dataset.content;if(key in values)el.textContent=values[key];});
-    document.querySelectorAll('[data-image]').forEach(el=>{const src=safeImageSource(values[el.dataset.image]);const img=el.querySelector('img');if(img&&src){img.src=src;el.dataset.hasImage='true';}else if(img){img.removeAttribute('src');el.dataset.hasImage='false';}});
+    document.querySelectorAll('[data-image]').forEach(el=>{const src=safeImageSource(values[el.dataset.image]);const img=el.querySelector('img');if(img&&src){img.dataset.realAlt ||= img.alt;img.alt=src.startsWith('./assets/ilustracao-')?`Imagem ilustrativa provisória: ${img.dataset.realAlt}`:img.dataset.realAlt;img.src=src;el.dataset.hasImage='true';}else if(img){img.removeAttribute('src');el.dataset.hasImage='false';}});
     const number=String(values.whatsapp||content.whatsapp).replace(/\D/g,'');
     document.querySelectorAll('[data-phone-label]').forEach(el=>{el.textContent=number==='5591982808543'?'+55 91 98280-8543':`+${number}`;});
     document.querySelectorAll('[data-whatsapp]').forEach(el=>{el.href=`https://wa.me/${number}`;el.target='_blank';el.rel='noopener noreferrer';});
