@@ -17,7 +17,7 @@ const path = require('path');
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 2);
       if (overflow) errors.push(`${name}/${view}: horizontal overflow`);
       const missingImages = await page.evaluate(() => [...document.querySelectorAll('body>main [data-image]')]
-        .filter(slot => !slot.querySelector('img')?.naturalWidth)
+        .filter(slot => !slot.matches('.carousel-track>[data-has-image="false"]') && !slot.querySelector('img')?.naturalWidth)
         .map(slot => slot.dataset.image));
       if (missingImages.length) errors.push(`${name}/${view}: images not loaded: ${missingImages.join(', ')}`);
       await page.close();

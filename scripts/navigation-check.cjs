@@ -86,6 +86,12 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   await wait(500);
   assert.equal(await page.locator('#kids').evaluate(el => el.classList.contains('is-target')), true);
   assert.ok(Math.abs(await page.locator('#kids').evaluate(el => el.getBoundingClientRect().top) - 28) <= 2, 'rolou até o cartão');
+  const prevDisabled = await page.locator('#kids [data-carousel-prev]').isDisabled();
+  await page.locator('#kids [data-carousel-next]').click();
+  await wait(700);
+  assert.equal(prevDisabled, true);
+  assert.ok(await page.locator('#kids .carousel-track').evaluate(el => Math.round(el.scrollLeft) === el.clientWidth), 'seta avançou uma foto');
+  assert.match(page.url(), /ministerios\.html#kids$/);
   await page.locator('main#main a[href*="assunto=Kids"]').click();
   await page.waitForURL('**/contato.html?assunto=Kids');
   await wait(500);
@@ -156,6 +162,20 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   await swipe(300, tileBox.y + 70, 95, tileBox.y + 82);
   await phone.waitForURL('**/horarios.html');
 
+  // Arrastar sobre o carrossel troca a foto, não a página.
+  await phone.goto(base + 'ministerios.html#kids');
+  await phone.waitForTimeout(600);
+  const kidsTrack = phone.locator('#kids .carousel-track');
+  await kidsTrack.scrollIntoViewIfNeeded();
+  const trackBox = await kidsTrack.boundingBox();
+  await swipe(trackBox.x + trackBox.width * .8, trackBox.y + trackBox.height / 2, trackBox.x + trackBox.width * .15, trackBox.y + trackBox.height / 2);
+  await wait(700);
+  assert.match(phone.url(), /ministerios\.html#kids$/);
+  assert.ok(await kidsTrack.evaluate(el => el.scrollLeft > 0), 'carrossel andou com o arraste');
+  assert.equal(await phone.locator('#kids .carousel-dots i').count(), 4);
+  assert.equal(await phone.locator('#kids .carousel-dots i.is-current').evaluate(el => [...el.parentNode.children].indexOf(el)), 1);
+  assert.equal(await phone.locator('#jovens .carousel-dots i').count(), 2);
+
   await phone.goto(base + 'contato.html');
   await phone.locator('#message').scrollIntoViewIfNeeded();
   const messageBox = await phone.locator('#message').boundingBox();
@@ -177,5 +197,5 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   await noMotion.waitForURL('**/horarios.html');
 
   await browser.close();
-  console.log('Sem recarregar, voltar/avançar com rolagem, âncora, assunto, F5, setas, pílula fixa, prévia no arraste, limites, campo de texto, gestos horizontal/vertical, rodapé e movimento reduzido: OK.');
+  console.log('Carrossel, sem recarregar, voltar/avançar com rolagem, âncora, assunto, F5, setas, pílula fixa, prévia no arraste, limites, campo de texto, gestos horizontal/vertical, rodapé e movimento reduzido: OK.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

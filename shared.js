@@ -203,7 +203,7 @@
     if(document.readyState==='complete')setTimeout(warmUp,300);else window.addEventListener('load',()=>setTimeout(warmUp,300),{once:true});
     document.addEventListener('keydown',event=>{
       if(window.innerWidth<1024||event.repeat||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||!['ArrowLeft','ArrowRight'].includes(event.key))return;
-      if(event.target instanceof Element&&event.target.closest('input,textarea,select,button,[contenteditable],[role="textbox"]'))return;
+      if(event.target instanceof Element&&event.target.closest('input,textarea,select,button,[contenteditable],[role="textbox"],[data-carousel]'))return;
       const next=current+(event.key==='ArrowRight'?1:-1);
       if(next<0||next>=pageOrder.length)return;
       event.preventDefault();
@@ -211,7 +211,7 @@
     });
     document.addEventListener('touchstart',event=>{
       drag=null;
-      if(busy||window.innerWidth>=1024||event.touches.length!==1||event.target.closest('button,input,textarea,select,label,[contenteditable],iframe'))return;
+      if(busy||window.innerWidth>=1024||event.touches.length!==1||event.target.closest('button,input,textarea,select,label,[contenteditable],iframe,[data-carousel]'))return;
       const touch=event.touches[0];
       if(touch.clientX<25||touch.clientX>window.innerWidth-25)return;
       drag={x:touch.clientX,y:touch.clientY,axis:null,offset:0,lastX:touch.clientX,lastTime:event.timeStamp,speed:0};
@@ -281,7 +281,7 @@
   }
   function applyValues(data) {
     const safeData={...data};
-    for(const key of ['home_photo','kids_photo','casais_photo','jovens_photo','mulheres_photo','culto_photo','comunidade_photo','fachada_photo','visita_photo','contato_photo']){
+    for(const key of Object.keys(content).filter(key=>/_photo(_\d+)?$/.test(key))){
       if(key in safeData&&!safeData[key])safeData[key]=content[key];
     }
     values={...values,...safeData};
@@ -291,9 +291,29 @@
     document.querySelectorAll('[data-phone-label]').forEach(el=>{el.textContent=number==='5591982808543'?'+55 91 98280-8543':`+${number}`;});
     document.querySelectorAll('[data-whatsapp]').forEach(el=>{el.href=`https://wa.me/${number}`;el.target='_blank';el.rel='noopener noreferrer';});
     document.querySelectorAll('[data-instagram]').forEach(el=>{el.href=`https://www.instagram.com/${encodeURIComponent(values.instagram||content.instagram)}/`;el.target='_blank';el.rel='noopener noreferrer';if(el.hasAttribute('data-edit-target'))el.textContent=`@${values.instagram||content.instagram}`;});
+    document.querySelectorAll('[data-carousel]').forEach(syncCarousel);
     document.querySelectorAll('[data-route]').forEach(el=>{el.href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(values.address||content.address)}`;el.target='_blank';el.rel='noopener noreferrer';});
     document.querySelectorAll('[data-map]').forEach(el=>{el.src=`https://www.google.com/maps?q=${encodeURIComponent(values.address||content.address)}&output=embed`;});
   }
+  // Carrossel dos ministérios: a rolagem é nativa com encaixe; setas e pontos só acompanham a posição.
+  function syncCarousel(carousel){
+    const track=carousel.querySelector('.carousel-track');
+    const slides=[...track.children].filter(slide=>slide.dataset.hasImage!=='false');
+    const dots=carousel.querySelector('.carousel-dots');
+    const index=Math.round(track.scrollLeft/Math.max(track.clientWidth,1));
+    if(dots.children.length!==slides.length)dots.innerHTML=slides.map(()=>'<i></i>').join('');
+    [...dots.children].forEach((dot,i)=>dot.classList.toggle('is-current',i===index));
+    carousel.classList.toggle('is-single',slides.length<2);
+    carousel.querySelector('[data-carousel-prev]').disabled=index<=0;
+    carousel.querySelector('[data-carousel-next]').disabled=index>=slides.length-1;
+  }
+  document.addEventListener('click',event=>{
+    const button=event.target.closest('[data-carousel-prev],[data-carousel-next]');
+    if(!button)return;
+    const track=button.closest('[data-carousel]').querySelector('.carousel-track');
+    track.scrollBy({left:(button.hasAttribute('data-carousel-next')?1:-1)*track.clientWidth,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  });
+  document.addEventListener('scroll',event=>{const carousel=event.target instanceof Element&&event.target.closest('[data-carousel]');if(carousel)syncCarousel(carousel);},true);
   applyValues(values);
   window.IEQ_APPLY_VALUES = applyValues;
   window.addEventListener('message', event=>{if(event.origin===location.origin&&event.data?.type==='ieqt-preview'&&event.data.values)applyValues(event.data.values);});

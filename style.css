@@ -343,3 +343,25 @@ html.is-paging-settle .page-peek.is-active,html.is-paging-settle body>:is(.site-
   [data-main-page="visita"] .step h3{font-size:23px;margin:0 0 8px}
   [data-main-page="visita"] .step p{font-size:18px}
 }
+
+/* Carrossel de fotos de cada ministério. */
+.carousel{position:relative}
+.carousel-track{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x pan-y}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-track>.photo-slot{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always}
+.carousel-track>.photo-slot[data-has-image="false"]{display:none}
+.carousel-btn{position:absolute;top:50%;z-index:2;width:44px;height:44px;margin-top:-22px;border:0;border-radius:50%;background:#ffffffe8;color:var(--ink);display:grid;place-items:center;box-shadow:0 4px 14px #0003;transition:opacity .2s,transform .2s}
+.carousel-btn:hover{transform:scale(1.06)}
+.carousel-btn .icon{width:22px;height:22px}
+.carousel-prev{left:12px}.carousel-prev .icon{transform:rotate(180deg)}
+.carousel-next{right:12px}
+.carousel-btn:disabled{opacity:0;pointer-events:none}
+.carousel.is-single .carousel-btn,.carousel.is-single .carousel-dots{display:none}
+.carousel-dots{position:absolute;left:0;right:0;bottom:12px;z-index:2;display:flex;justify-content:center;gap:7px;pointer-events:none}
+.carousel-dots i{width:8px;height:8px;border-radius:4px;background:#ffffffa0;box-shadow:0 0 0 1px #0002;transition:width .25s,background .25s}
+.carousel-dots i.is-current{width:22px;background:#fff}
+/* Título do formulário de contato; no computador a tela aprovada não tem. */
+.form-intro h2{font-size:30px;margin:0 0 8px}
+.form-intro p{margin:0 0 26px;color:var(--muted);font-size:17px}
+@media(min-width:1121px){.form-intro{display:none}}
+@media(max-width:800px){.contact-visual{height:auto}}
