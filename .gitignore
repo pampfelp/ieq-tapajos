@@ -1,0 +1,9 @@
+.env
+config.local.js
+*.log
+qa/
+conceito-*.png
+pagina-*.png
+referencia-aprovada-home.png
+referencias-escolhidas/
+logo.jpg

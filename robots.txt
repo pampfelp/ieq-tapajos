@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /ieq-tapajos/admin.html
+Sitemap: https://pampfelp.github.io/ieq-tapajos/sitemap.xml

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 322 122" role="img" aria-labelledby="title desc">
+  <title id="title">IEQ Tapajós</title>
+  <desc id="desc">Igreja do Evangelho Quadrangular Tapajós</desc>
+  <g transform="translate(4 3)">
+    <path d="M53 8v19m-9-10h18M28 61V45l25-15 25 15v16M18 61V52l10-6m50 0 10 6v9" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="53" cy="49" r="10" fill="none" stroke="#fff" stroke-width="2.7"/>
+    <path d="M7 77h23m-11-12v25" fill="none" stroke="#f45a50" stroke-width="5.5" stroke-linecap="square"/>
+    <path d="M39 83c6 0 10-4 12-11 6 5 12 7 18 4-5 9-12 15-23 14l-7-3 7-2-7-2zm11-10 2-8 5 5m2-2 5-5m-3 8 9-3" fill="none" stroke="#ffd53b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M75 68h16v12c0 7-3 10-8 10s-8-3-8-10V68zm3 25h10m-5-3v3" fill="none" stroke="#11b8ea" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M99 91h22l-2-19-5 6-5-8-5 8-5-6-2 19zm0 5h22" fill="#b879d0"/>
+    <text x="2" y="117" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="26" font-weight="900" letter-spacing="-2">IEQT</text>
+  </g>
+  <text x="138" y="78" fill="#f8f6f1" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="800" letter-spacing="2">TAPAJÓS</text>
+  <text x="138" y="101" fill="#bfc7c9" font-family="Arial,Helvetica,sans-serif" font-size="13">Pr. Manoel &amp; Pra. Nete Siqueira</text>
+</svg>

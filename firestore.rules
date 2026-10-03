@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Projeto público independente do sistema interno. Escritas bloqueadas
+    // até a igreja escolher a proteção do painel e ligar a publicação.
+    match /site/publico {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /site_images/{imageId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
