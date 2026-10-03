@@ -155,3 +155,15 @@ body[data-page="localizacao"] .map-copy h1 .accent{display:block}
 .hours-bottom .hours-facade-label{display:none}
 @media(max-width:1120px){.hours-bottom{grid-template-columns:1fr;height:auto}.hours-bottom .location-bar{display:flex;flex-wrap:wrap;gap:12px}.hours-bottom .hours-facade{height:220px}.hours-instagram{border-left:0;padding:0;width:100%}}
 @media(max-width:560px){.hours-bottom .location-bar h2{white-space:normal;font-size:27px}.hours-bottom .location-bar .btn{min-width:0}.hours-bottom .hours-facade{height:180px}}
+
+html.page-transitioning{overflow-x:clip}
+body.page-leave-forward{animation:page-leave-forward .28s ease-in both;pointer-events:none}
+body.page-leave-backward{animation:page-leave-backward .28s ease-in both;pointer-events:none}
+body.page-enter-forward{animation:page-enter-forward .38s cubic-bezier(.2,.7,.2,1) both}
+body.page-enter-backward{animation:page-enter-backward .38s cubic-bezier(.2,.7,.2,1) both}
+@keyframes page-leave-forward{to{transform:translate3d(-18vw,0,0);opacity:.35}}
+@keyframes page-leave-backward{to{transform:translate3d(18vw,0,0);opacity:.35}}
+@keyframes page-enter-forward{from{transform:translate3d(18vw,0,0);opacity:.65}}
+@keyframes page-enter-backward{from{transform:translate3d(-18vw,0,0);opacity:.65}}
+@media(prefers-reduced-motion:reduce){body.page-leave-forward,body.page-leave-backward,body.page-enter-forward,body.page-enter-backward{animation:none}}
+@media(max-width:800px){body.page-swipe-enabled{touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain}}

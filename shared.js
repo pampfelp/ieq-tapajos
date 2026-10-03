@@ -21,6 +21,73 @@
   document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
   const params = new URLSearchParams(location.search);
   const previewMode=params.get('preview')==='1';
+  const pageOrder=[...nav.map(([href,,key])=>[href,key]),['visita.html','visita']];
+  const pageIndex=pageOrder.findIndex(([,key])=>key===page);
+  if(pageIndex>=0&&!previewMode){
+    document.body.classList.add('page-swipe-enabled');
+    const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+    const transitionKey='ieqt_page_transition_v1';
+    const currentFile=location.pathname.split('/').pop()||'index.html';
+    let navigating=false;
+    try{
+      const incoming=JSON.parse(sessionStorage.getItem(transitionKey)||'null');
+      sessionStorage.removeItem(transitionKey);
+      if(incoming?.file===currentFile&&Date.now()-incoming.at<5000&&!reducedMotion.matches){
+        document.documentElement.classList.add('page-transitioning');
+        document.body.classList.add(`page-enter-${incoming.direction}`);
+        setTimeout(()=>document.documentElement.classList.remove('page-transitioning'),420);
+      }
+    }catch(_){}
+    function navigateTo(index,href){
+      if(navigating||index<0||index>=pageOrder.length)return;
+      navigating=true;
+      const direction=index>pageIndex?'forward':'backward';
+      if(reducedMotion.matches){location.assign(href);return;}
+      try{sessionStorage.setItem(transitionKey,JSON.stringify({file:pageOrder[index][0],direction,at:Date.now()}));}catch(_){}
+      document.documentElement.classList.add('page-transitioning');
+      document.body.classList.add(`page-leave-${direction}`);
+      setTimeout(()=>location.assign(href),280);
+    }
+    document.addEventListener('keydown',event=>{
+      if(window.innerWidth<=800||event.repeat||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||!['ArrowLeft','ArrowRight'].includes(event.key))return;
+      if(event.target instanceof Element&&event.target.closest('input,textarea,select,button,[contenteditable],[role="textbox"]'))return;
+      const next=pageIndex+(event.key==='ArrowRight'?1:-1);
+      if(next<0||next>=pageOrder.length)return;
+      event.preventDefault();
+      navigateTo(next,new URL(pageOrder[next][0],location.href).href);
+    });
+    let touchStart=null;
+    document.addEventListener('touchstart',event=>{
+      touchStart=null;
+      if(window.innerWidth>800||event.touches.length!==1||event.target.closest('button,input,textarea,select,label,[contenteditable],iframe'))return;
+      const touch=event.touches[0];
+      if(touch.clientX<25||touch.clientX>window.innerWidth-25)return;
+      touchStart={x:touch.clientX,y:touch.clientY};
+    },{passive:true});
+    document.addEventListener('touchend',event=>{
+      if(!touchStart||event.changedTouches.length!==1)return;
+      const deltaX=event.changedTouches[0].clientX-touchStart.x;
+      const deltaY=event.changedTouches[0].clientY-touchStart.y;
+      touchStart=null;
+      if(Math.abs(deltaX)<72||Math.abs(deltaX)<Math.abs(deltaY)*1.4)return;
+      const next=pageIndex+(deltaX<0?1:-1);
+      navigateTo(next,new URL(pageOrder[next]?.[0]||currentFile,location.href).href);
+    },{passive:true});
+    document.addEventListener('touchcancel',()=>{touchStart=null;},{passive:true});
+    document.addEventListener('click',event=>{
+      if(navigating){event.preventDefault();return;}
+      if(event.defaultPrevented||event.button!==0||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey)return;
+      const anchor=event.target.closest('a[href]');
+      if(!anchor||anchor.target||anchor.hasAttribute('download'))return;
+      const destination=new URL(anchor.href);
+      if(destination.origin!==location.origin)return;
+      const file=destination.pathname.split('/').pop()||'index.html';
+      const index=pageOrder.findIndex(([href])=>href===file);
+      if(index<0||index===pageIndex)return;
+      event.preventDefault();
+      navigateTo(index,destination.href);
+    });
+  }
   let values = content;
   if (params.get('preview') === '1') {
     try { values={...content,...JSON.parse(localStorage.getItem('ieqt_draft')||'{}')}; } catch (_) {}
