@@ -32,7 +32,11 @@
     return '';
   }
   function applyValues(data) {
-    values={...values,...data};
+    const safeData={...data};
+    for(const key of ['home_photo','kids_photo','casais_photo','jovens_photo','mulheres_photo','culto_photo','comunidade_photo','fachada_photo','visita_photo','contato_photo']){
+      if(key in safeData&&!safeData[key])safeData[key]=content[key];
+    }
+    values={...values,...safeData};
     document.querySelectorAll('[data-content]').forEach(el=>{const key=el.dataset.content;if(key in values)el.textContent=values[key];});
     document.querySelectorAll('[data-image]').forEach(el=>{const src=safeImageSource(values[el.dataset.image]);const img=el.querySelector('img');if(img&&src){img.src=src;el.dataset.hasImage='true';}else if(img){img.removeAttribute('src');el.dataset.hasImage='false';}});
     const number=String(values.whatsapp||content.whatsapp).replace(/\D/g,'');
@@ -51,7 +55,7 @@
       const db=getFirestore(initializeApp(config.firebase));
       onSnapshot(doc(db,'site','publico'), snapshot=>{if(snapshot.exists())applyValues(snapshot.data());},()=>{});
       const imageKeys=[...new Set([...document.querySelectorAll('[data-image]')].map(el=>el.dataset.image))];
-      imageKeys.forEach(key=>onSnapshot(doc(db,'site_images',key),snapshot=>{applyValues({[key]:snapshot.exists()?snapshot.data().src:''});},()=>{}));
+      imageKeys.forEach(key=>onSnapshot(doc(db,'site_images',key),snapshot=>{applyValues({[key]:snapshot.exists()?snapshot.data().src:content[key]});},()=>{}));
     }).catch(()=>{});
   }
   const floating=document.querySelector('[data-floating-contact]');

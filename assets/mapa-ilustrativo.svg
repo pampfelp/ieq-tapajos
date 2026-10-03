@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 700" role="img" aria-labelledby="title">
+  <title id="title">Ilustração de ruas próximas à igreja</title>
+  <rect width="700" height="700" fill="#eae9e3"/>
+  <path d="M0 550 C80 575 70 650 160 700 H0Z" fill="#a9d9e9"/>
+  <path d="M0 525 C100 545 110 650 190 700" fill="none" stroke="#f7f7f4" stroke-width="17"/>
+  <path d="M190 15 255 45 208 150 145 117Z M425 10 478 43 430 137 373 103Z M555 238 639 275 614 336 531 298Z M190 412 271 451 242 519 156 477Z M405 480 493 523 458 593 371 550Z" fill="#cfe4ce"/>
+  <g fill="none" stroke="#fdfcf9" stroke-width="15" stroke-linecap="square" stroke-linejoin="round">
+    <path d="M-50 25 735 469M-75 129 721 578M-63 247 632 685M-36 372 416 735M47-55 782 343"/>
+    <path d="M146-60-110 476M295-56-55 667M460-65 103 742M615-50 292 750M760 38 461 747M785 242 616 755"/>
+  </g>
+  <g fill="none" stroke="#fff" stroke-width="5" opacity=".8">
+    <path d="M0 162 701 550M8 384 546 700M322 0 0 663M654 0 288 700"/>
+  </g>
+</svg>
