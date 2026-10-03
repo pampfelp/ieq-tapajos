@@ -191,7 +191,7 @@ html.is-paging-settle .page-peek.is-active,html.is-paging-settle body>:is(.site-
 }
 .desktop-nav a{white-space:nowrap}
 @media(min-width:1024px) and (max-width:1119px){.desktop-nav{gap:18px}.desktop-nav a{font-size:15px}.header-cta{min-width:0;padding-inline:18px}}
-.faith .brand-symbol{display:block;height:53px;flex:none;background-image:url('./assets/logo-original.png');background-repeat:no-repeat;background-size:226px 226px}
+.faith .brand-symbol{display:block;height:53px;flex:none;background-image:url('./assets/logo-480.webp');background-repeat:no-repeat;background-size:226px 226px}
 .faith .brand-cross{width:45px;background-position:-21px -89px}
 .faith .brand-dove{width:55px;background-position:-65px -90px}
 .faith .brand-chalice{width:36px;background-position:-120px -92px}

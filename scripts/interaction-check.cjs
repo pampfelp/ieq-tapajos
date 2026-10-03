@@ -44,7 +44,7 @@ const assert = require('node:assert/strict');
   await page.locator('#photo-file').setInputFiles('C:/Users/Camille Oliveira/Desktop/Site IEQ Tapajós/assets/icon-192.png');
   assert.equal(await page.locator('#site-preview').contentFrame().locator('[data-image=home_photo]').getAttribute('data-has-image'), 'true');
   await page.locator('#reset-field').click();
-  await page.waitForFunction(() => document.querySelector('#site-preview').contentDocument.querySelector('[data-image=home_photo] img')?.getAttribute('src') === './assets/ilustracao-home-worship.jpg');
+  await page.waitForFunction(() => document.querySelector('#site-preview').contentDocument.querySelector('[data-image=home_photo] img')?.getAttribute('src') === './assets/ilustracao-home-worship.webp');
   assert.equal(await page.locator('#site-preview').contentFrame().locator('[data-image=home_photo]').getAttribute('data-has-image'), 'true');
   await browser.close();
   console.log('Pílula, marca, rodapé, rota, consentimento, formulário e painel local: OK.');
