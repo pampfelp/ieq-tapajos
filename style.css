@@ -162,7 +162,7 @@ html.is-paging{overflow-x:clip}
 .page-peek.is-active{visibility:visible}
 body>main:focus{outline:none}
 html.is-paging-settle .page-peek.is-active,html.is-paging-settle body>:is(.site-header,main,.site-footer){transition:transform .36s cubic-bezier(.22,.7,.2,1)}
-@media(max-width:800px){body.page-swipe-enabled{touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain}}
+@media(max-width:1023px){body.page-swipe-enabled{touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain}}
 
 /* A navegação fica sempre à vista; o fim do rodapé tem espaço para passar acima dela. */
 .nav-shell{justify-content:space-between}
@@ -172,14 +172,25 @@ html.is-paging-settle .page-peek.is-active,html.is-paging-settle body>:is(.site-
 .brand-copy{display:flex;flex-direction:column;gap:2px;color:#fff;white-space:nowrap}
 .brand-copy strong{font-size:25px;line-height:1;letter-spacing:.09em}
 .brand-copy small{font-size:11px;color:#d8dddd}
-.site-dock{position:fixed;z-index:40;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;align-items:center;gap:3px;max-width:calc(100vw - 24px);padding:7px;background:#1c2428ed;border:1px solid #ffffff40;border-radius:999px;box-shadow:0 10px 34px #0007;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.desktop-nav{display:flex;align-items:center;gap:clamp(23px,2.8vw,44px);margin:auto clamp(0px,calc((100vw - 1120px)*.245),110px) auto auto}
+.desktop-nav a{font-size:16px;line-height:1.3;padding:12px 0 9px;border-bottom:3px solid transparent;transition:color .2s,border-color .2s,transform .2s}
+.desktop-nav a:hover{color:#fff;transform:translateY(-2px);border-color:var(--yellow)}
+.desktop-nav a[aria-current=page]{border-color:var(--coral)}
+.site-dock{display:none;position:fixed;z-index:40;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);align-items:center;gap:3px;max-width:calc(100vw - 24px);padding:7px;background:#1c2428ed;border:1px solid #ffffff40;border-radius:999px;box-shadow:0 10px 34px #0007;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .site-dock a{display:flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 15px;border-radius:999px;color:#d4dddd;font-size:13px;font-weight:700;white-space:nowrap;transition:background .25s,color .25s,transform .25s,flex .3s}
 .site-dock a:hover{background:#ffffff26;color:#fff;transform:translateY(-2px)}
 .site-dock a[aria-current=page]{background:var(--coral);color:#fff}
 .site-dock a[aria-current=page]:hover{background:#ed4b42}
 .site-dock .icon{width:21px;height:21px;stroke-width:1.9}
-.site-footer{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
-.cookie-banner,.install-banner{bottom:calc(88px + env(safe-area-inset-bottom))}
+/* Menu no topo a partir de 1024px; abaixo disso (celular e tablet) a navegação é a pílula. */
+@media(max-width:1023px){
+  .desktop-nav{display:none}
+  .site-dock{display:flex}
+  .site-footer{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+  .cookie-banner,.install-banner{bottom:calc(88px + env(safe-area-inset-bottom))}
+}
+.desktop-nav a{white-space:nowrap}
+@media(min-width:1024px) and (max-width:1119px){.desktop-nav{gap:18px}.desktop-nav a{font-size:15px}.header-cta{min-width:0;padding-inline:18px}}
 .faith .brand-symbol{display:block;height:53px;flex:none;background-image:url('./assets/logo-original.png');background-repeat:no-repeat;background-size:226px 226px}
 .faith .brand-cross{width:45px;background-position:-21px -89px}
 .faith .brand-dove{width:55px;background-position:-65px -90px}

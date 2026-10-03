@@ -11,7 +11,7 @@
   const page = document.body.dataset.page || '';
   const header = document.querySelector('[data-site-header]');
   if (header) {
-    header.innerHTML = `<a class="skip-link" href="#main">Pular para o conteúdo</a><div class="nav-shell"><a class="brand" href="./index.html" aria-label="IEQ Tapajós, página inicial"><img src="./assets/logo-original.png" width="1254" height="1254" alt=""><span class="brand-copy"><strong>TAPAJÓS</strong><small>Pr. Manoel &amp; Pra. Nete Siqueira</small></span></a><a class="btn btn-primary header-cta" href="./visita.html">Venha nos visitar</a></div>`;
+    header.innerHTML = `<a class="skip-link" href="#main">Pular para o conteúdo</a><div class="nav-shell"><a class="brand" href="./index.html" aria-label="IEQ Tapajós, página inicial"><img src="./assets/logo-original.png" width="1254" height="1254" alt=""><span class="brand-copy"><strong>TAPAJÓS</strong><small>Pr. Manoel &amp; Pra. Nete Siqueira</small></span></a><nav class="desktop-nav" aria-label="Navegação principal">${nav.slice(0,5).map(([href,label,key])=>`<a href="./${href}"${page===key?' aria-current="page"':''}>${label}</a>`).join('')}</nav><a class="btn btn-primary header-cta" href="./visita.html">Venha nos visitar</a></div>`;
     const dock = document.createElement('nav');
     dock.className = 'site-dock';
     dock.setAttribute('aria-label','Páginas do site');
@@ -43,12 +43,15 @@
     let current=pageIndex,liveMain=document.querySelector('body>main'),activePeek=null,activeIndex=-1,busy=false,drag=null,pendingSync=false;
     liveMain.tabIndex=-1;
     pages.set(current,{main:liveMain,head:headNodes(document),frame:null});
-    function makeFrame(){
+    function markCurrent(scope,index){
+      scope.querySelectorAll('.site-dock a,.desktop-nav a').forEach(link=>{if(link.getAttribute('href')===`./${pageOrder[index][0]}`)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');});
+    }
+    function makeFrame(index){
       const frame=document.createElement('div');
       frame.className='page-peek';
       frame.setAttribute('aria-hidden','true');
       frame.inert=true;
-      const top=header.cloneNode(true);top.removeAttribute('data-site-header');
+      const top=header.cloneNode(true);top.removeAttribute('data-site-header');markCurrent(top,index);
       const bottom=footer.cloneNode(true);bottom.removeAttribute('data-site-footer');
       frame.append(top,bottom);
       document.body.append(frame);
@@ -67,7 +70,7 @@
         if(!main||main.dataset.mainPage!==pageOrder[index][1]){htmlCache.delete(index);return null;}
         main.removeAttribute('id');
         main.tabIndex=-1;
-        const entry={main:document.adoptNode(main),head:headNodes(doc),frame:makeFrame()};
+        const entry={main:document.adoptNode(main),head:headNodes(doc),frame:makeFrame(index)};
         entry.frame.insertBefore(entry.main,entry.frame.lastElementChild);
         pages.set(index,entry);
         applyValues({});
@@ -127,7 +130,7 @@
     function swapTo(index,url,top,push){
       saveScroll();
       const leaving=pages.get(current),entering=pages.get(index);
-      leaving.frame=leaving.frame||makeFrame();
+      leaving.frame=leaving.frame||makeFrame(current);
       liveMain.removeAttribute('id');
       liveMain.style.transform='';
       liveMain.replaceWith(entering.main);
@@ -137,7 +140,8 @@
       document.head.querySelectorAll(headSelector).forEach(node=>node.remove());
       document.head.append(...entering.head.map(node=>node.cloneNode(true)));
       document.body.dataset.page=pageOrder[index][1];
-      document.querySelectorAll('.site-dock a').forEach((link,i)=>{if(i===index)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');});
+      markCurrent(header,index);
+      markCurrent(document.querySelector('.site-dock'),index);
       current=index;
       if(push)history.pushState({ieqt:Math.random().toString(36).slice(2),scrollY:top},'',url);
       reset();
@@ -198,7 +202,7 @@
     window.addEventListener('pageshow',event=>{if(event.persisted){busy=false;drag=null;reset();syncToLocation();}});
     if(document.readyState==='complete')setTimeout(warmUp,300);else window.addEventListener('load',()=>setTimeout(warmUp,300),{once:true});
     document.addEventListener('keydown',event=>{
-      if(window.innerWidth<=800||event.repeat||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||!['ArrowLeft','ArrowRight'].includes(event.key))return;
+      if(window.innerWidth<1024||event.repeat||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||!['ArrowLeft','ArrowRight'].includes(event.key))return;
       if(event.target instanceof Element&&event.target.closest('input,textarea,select,button,[contenteditable],[role="textbox"]'))return;
       const next=current+(event.key==='ArrowRight'?1:-1);
       if(next<0||next>=pageOrder.length)return;
@@ -207,7 +211,7 @@
     });
     document.addEventListener('touchstart',event=>{
       drag=null;
-      if(busy||window.innerWidth>800||event.touches.length!==1||event.target.closest('button,input,textarea,select,label,[contenteditable],iframe'))return;
+      if(busy||window.innerWidth>=1024||event.touches.length!==1||event.target.closest('button,input,textarea,select,label,[contenteditable],iframe'))return;
       const touch=event.touches[0];
       if(touch.clientX<25||touch.clientX>window.innerWidth-25)return;
       drag={x:touch.clientX,y:touch.clientY,axis:null,offset:0,lastX:touch.clientX,lastTime:event.timeStamp,speed:0};

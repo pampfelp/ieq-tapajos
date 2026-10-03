@@ -20,18 +20,20 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
 
   // A pílula não pode sair do lugar enquanto a página desliza.
   await page.evaluate(() => window.scrollTo(0, 600));
-  const restingDock = await dockRect(page);
+  // No computador a navegação é o menu do topo; a pílula fica só no celular e no tablet.
+  assert.equal(await page.locator('.site-dock').isVisible(), false);
+  assert.equal(await page.locator('body>.site-header .desktop-nav a').count(), 5);
   await page.keyboard.press('ArrowRight');
   await wait(180);
   assert.equal(await page.locator('html').evaluate(el => el.classList.contains('is-paging')), true);
-  assert.deepEqual(await dockRect(page), restingDock);
+  assert.equal(await page.locator('.page-peek.is-active .desktop-nav a[aria-current="page"]').getAttribute('href'), './horarios.html');
   assert.equal(await page.locator('.page-peek.is-active [data-main-page]').getAttribute('data-main-page'), 'horarios');
   await page.waitForURL('**/horarios.html');
 
   await page.keyboard.press('ArrowLeft');
   await page.waitForURL('**/index.html');
 
-  await page.locator('.site-dock a[href="./ministerios.html"]').click({ noWaitAfter: true });
+  await page.locator('body>.site-header .desktop-nav a[href="./ministerios.html"]').click({ noWaitAfter: true });
   await wait(250);
   assert.equal(await page.locator('.page-peek.is-active [data-main-page]').getAttribute('data-main-page'), 'ministerios');
   await page.waitForURL('**/ministerios.html');
@@ -63,7 +65,7 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   assert.equal(await page.title(), 'Horários dos cultos — IEQ Tapajós');
   assert.equal(await page.locator('main#main').getAttribute('data-main-page'), 'horarios');
   assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), 'https://pampfelp.github.io/ieq-tapajos/horarios.html');
-  assert.equal(await page.locator('.site-dock a[aria-current="page"]').getAttribute('href'), './horarios.html');
+  assert.equal(await page.locator('body>.site-header .desktop-nav a[aria-current="page"]').getAttribute('href'), './horarios.html');
   await page.goBack();
   await page.waitForURL('**/index.html');
   await wait(500);
@@ -88,7 +90,7 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   await page.waitForURL('**/contato.html?assunto=Kids');
   await wait(500);
   assert.equal(await page.locator('#message').inputValue(), 'Olá! Gostaria de saber mais sobre Kids.');
-  await page.locator('.site-dock a[href="./contato.html"]').click();
+  await page.locator('body>.site-header .desktop-nav a[href="./contato.html"]').click();
   await wait(300);
   assert.match(page.url(), /contato\.html\?assunto=Kids$/);
   assert.equal(await page.evaluate(() => window.__semRecarga), 1);
