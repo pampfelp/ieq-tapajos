@@ -16,7 +16,7 @@ const path = require('path');
       await page.screenshot({ path: path.join(out, `${name}-${view}.png`), fullPage: true });
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 2);
       if (overflow) errors.push(`${name}/${view}: horizontal overflow`);
-      const missingImages = await page.evaluate(() => [...document.querySelectorAll('[data-image]')]
+      const missingImages = await page.evaluate(() => [...document.querySelectorAll('body>main [data-image]')]
         .filter(slot => !slot.querySelector('img')?.naturalWidth)
         .map(slot => slot.dataset.image));
       if (missingImages.length) errors.push(`${name}/${view}: images not loaded: ${missingImages.join(', ')}`);

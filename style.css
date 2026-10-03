@@ -213,3 +213,133 @@ html.is-paging-settle .page-peek.is-active,html.is-paging-settle body>:is(.site-
   .site-footer .brand img{width:84px;height:84px}
   .cookie-banner{left:8px;right:8px}
 }
+
+/* Fidelidade às telas aprovadas no computador (medidas em 1487 px). */
+.faith small{font-size:inherit}
+@media(max-width:1120px){[data-main-page="ministerios"] h1 br,[data-main-page="visita"] h1 br{display:none}}
+@media(min-width:1121px){.faith small{display:block;font-size:.72em;letter-spacing:.02em;margin-top:2px}}
+@media(min-width:1024px){
+  .site-header .brand{gap:0}
+  .site-header .brand img{width:142px;height:142px;margin:-12px 0 -12px -17px;position:relative;top:5px}
+  .site-header .brand-copy{position:relative;top:36px}
+  .site-header .brand-copy strong{font-size:20px;color:#babdc2}
+  .site-header .brand-copy small{font-size:12.5px;color:#bdc1c4}
+  .header-cta{font-size:18px;font-weight:400}
+  .nav-shell{padding-right:43px}
+}
+@media(min-width:1121px){
+  .home-hero .hero-copy{padding-top:45px}
+  .home-hero .hero-copy .eyebrow{margin-bottom:20px}
+  .home-hero .hero-copy h1{line-height:.84;margin-bottom:22px}
+  .home-hero .hero-copy .lead{font-size:19.5px;max-width:425px;margin-bottom:22px}
+  .home-hero .button-row .btn{font-weight:400}
+  .home-hero .faith-row{margin-top:36px}
+  .home-hero::before,.home-hero::after{content:"";position:absolute;top:0;z-index:7}
+  .home-hero::before{left:38.6%;width:67px;height:130px;background:#0ebbf1}
+  .home-hero::after{right:0;width:3.4%;height:110px;background:#bc82d7}
+  .home-hero .hero-visual::before,.home-hero .home-info::after{display:none}
+  .home-hero .home-info{margin-right:3.4vw;height:425px;padding:30px 34px 0 38px;position:relative;z-index:6}
+  .ministry-label p{max-width:210px}
+  .home-facade{top:110px;bottom:0;height:auto;width:32.5%;clip-path:polygon(25% 0,100% 0,100% 100%,0 100%,0 68.5%,25% 68.5%)}
+  .home-hero .hero-visual::after{z-index:6;right:auto;left:75.2%;bottom:82px;width:133px;height:60px;background:#ffd83f}
+}
+@media(min-width:1121px){
+  [data-main-page="horarios"] .split-hero{position:relative}
+  [data-main-page="horarios"] .split-hero .hero-copy{clip-path:polygon(0 0,84.8% 0,94.6% 55.8%,94.6% 100%,0 100%)}
+  [data-main-page="horarios"] .split-hero .hero-copy h1{font-size:88px;line-height:.94;width:111%;transform:scaleX(.9)}
+  [data-main-page="horarios"] .split-hero .hero-visual{margin-left:-95px}
+  [data-main-page="horarios"] .split-hero .hero-visual::before{display:none}
+  [data-main-page="horarios"] .split-hero .hero-visual::after{right:0;bottom:0;width:64px;height:123px;background:#bc82d7}
+  [data-main-page="horarios"] .split-hero::before,[data-main-page="horarios"] .split-hero::after{content:"";position:absolute;top:0;z-index:5}
+  [data-main-page="horarios"] .split-hero::before{left:45.8%;width:66px;height:115px;background:#0ebbf1}
+  [data-main-page="horarios"] .split-hero::after{right:0;width:64px;height:93px;background:#ffd83f}
+  [data-main-page="horarios"] .split-hero .schedule-icon{width:75px;height:75px}
+  [data-main-page="horarios"] .split-hero .schedule-icon .icon{width:34px;height:34px}
+  .hours-bottom .location-bar .btn{min-width:233px;min-height:53px;font-size:19px;font-weight:400}
+  [data-main-page="horarios"] .split-hero .schedule-card{height:237px;min-height:237px}
+  .hours-bottom .location-bar>.icon-disc .icon{width:34px;height:34px}
+  .hours-facade::before{content:"";position:absolute;left:0;top:0;width:56px;height:50px;background:#0ebbf1;z-index:2}
+}
+.ministry-tile{display:flex;flex-direction:column}.ministry-tile .ministry-label{flex:1}
+@media(min-width:1121px){
+  [data-main-page="ministerios"] .page-intro h1{line-height:.9;width:113%;transform:scaleX(.89);transform-origin:left center}
+  [data-main-page="ministerios"] .page-intro .lead{font-size:25px}
+  [data-main-page="ministerios"] .page-intro{padding-top:31px;padding-bottom:30px;min-height:0}
+  [data-main-page="ministerios"] .page-intro .eyebrow{margin-bottom:13px}
+  [data-main-page="ministerios"] .ministry-tile .photo-slot{height:244px;min-height:244px}
+  [data-main-page="ministerios"] .ministry-label{min-height:152px}
+  [data-main-page="ministerios"] .ministry-label p{font-size:17px;max-width:235px}
+  [data-main-page="ministerios"] .dark-band{position:relative;overflow:hidden;padding-top:40px;padding-bottom:38px}
+  [data-main-page="ministerios"] .dark-band::before,[data-main-page="ministerios"] .dark-band::after,[data-main-page="ministerios"] .callout::before{content:"";position:absolute}
+  [data-main-page="ministerios"] .dark-band::before{left:0;top:0;bottom:0;width:80px;background:#0ebbf1}
+  [data-main-page="ministerios"] .callout::before{left:80px;bottom:0;width:62px;height:118px;background:#ffd83f}
+  [data-main-page="ministerios"] .dark-band::after{right:0;bottom:0;width:80px;height:150px;background:#bc82d7}
+  [data-main-page="ministerios"] .dark-band .container{padding-left:220px;padding-right:157px}
+  [data-main-page="ministerios"] .callout h2{font-size:68px;margin-bottom:4px}
+  [data-main-page="ministerios"] .callout p{font-size:22px;max-width:540px;line-height:1.3;color:#e9ecec}
+  [data-main-page="ministerios"] .callout .btn{min-width:320px;min-height:67px;font-size:23px;font-weight:400}
+}
+@media(min-width:1121px){
+  .map-layout{position:relative;grid-template-columns:37.5% 38.5% 24%;height:570px;min-height:570px}
+  .map-layout::before{content:"";position:absolute;left:33.1%;top:0;width:66px;height:124px;background:#0ebbf1;z-index:3}
+  .map-card{min-height:570px}.map-card::before{display:none}
+  .map-copy{position:relative;padding-top:80px}
+  .map-copy::after{content:"";position:absolute;left:0;bottom:0;width:54px;height:68px;background:#ffd83f}
+  .map-copy .eyebrow{margin-bottom:62px}
+  .map-copy h1{font-size:93px;line-height:.97;width:120%;transform:scaleX(.84);transform-origin:left center;margin-bottom:24px}
+  .map-copy .lead{font-size:21px}
+  .map-pin{left:64.3%;top:33.4%}
+  .map-pin img{width:90px;height:90px}
+  .map-panel{padding:76px 35px 0 44px}
+  .map-panel .eyebrow::before{background:var(--coral)}
+  [data-main-page="localizacao"] .map-panel .info-line{gap:27px;font-size:24px;font-weight:700;white-space:nowrap;margin-top:30px;margin-bottom:38px}
+  .map-panel .icon-disc{width:80px;height:80px}.map-panel .icon-disc .icon{width:36px;height:36px}
+  .map-panel .btn{min-height:63px;font-size:22px;font-weight:400;margin-bottom:24px}
+  [data-main-page="localizacao"] .section{padding-top:62px}
+  [data-main-page="localizacao"] .three-steps{margin-inline:-28px}
+  [data-main-page="localizacao"] .step{grid-template-columns:124px 1fr}
+  [data-main-page="localizacao"] .step .icon-disc{width:123px;height:123px}
+  [data-main-page="localizacao"] .step .icon{width:60px;height:60px}
+  [data-main-page="localizacao"] .step h3{letter-spacing:-.045em;white-space:nowrap}
+}
+@media(min-width:1024px){.btn{font-weight:400}}
+@media(min-width:1121px){
+  .contact-layout{min-height:628px;height:628px}
+  .contact-visual .photo-slot{min-height:628px}
+  .contact-copy{padding-top:40px;padding-bottom:20px}
+  .contact-copy h1{font-size:86px;letter-spacing:-.07em;margin-bottom:14px}
+  .contact-copy .lead{font-size:23px;margin-bottom:26px}
+  .contact-channel{border-radius:6px;padding:22px 24px}
+  .contact-channel .icon-disc{width:63px;height:63px}
+  .contact-channel .channel-title{font-size:27px;font-weight:700;gap:30px}
+  .contact-channel.compact .channel-title{font-size:25px;font-weight:400}
+  .contact-channel .btn{min-height:55px;font-size:20px;margin-top:14px}
+  .contact-copy>p:last-child{margin-top:12px}
+  .contact-visual::before{left:-40px}
+  .contact-form-wrap{background:var(--paper);padding-top:57px;padding-bottom:0}
+  .contact-form input:not([type=checkbox]){padding:12px 20px}
+  .contact-form textarea{min-height:142px;padding:12px 20px}
+  .form-field{margin-bottom:22px}
+  .contact-form button{min-height:53px;font-size:20px;margin-top:10px}
+}
+@media(min-width:1121px){
+  [data-main-page="visita"] .split-hero{position:relative;height:635px;min-height:635px;overflow:hidden}
+  [data-main-page="visita"] .split-hero .hero-copy,[data-main-page="visita"] .split-hero .hero-visual,[data-main-page="visita"] .split-hero .hero-visual .photo-slot{min-height:635px;height:635px}
+  [data-main-page="visita"] .split-hero .hero-copy{padding-top:43px;width:calc(100% + 80px);margin-right:-80px;clip-path:polygon(0 0,89.7% 0,89.7% 20%,99.5% 52%,99.5% 100%,0 100%)}
+  [data-main-page="visita"] .split-hero .hero-copy .eyebrow{margin-bottom:40px}
+  [data-main-page="visita"] .split-hero .hero-copy h1{font-size:98px;line-height:.95;white-space:nowrap;width:133%;transform:scaleX(.75);transform-origin:left center;margin-bottom:18px}
+  [data-main-page="visita"] .split-hero .hero-copy .lead{font-size:22px;max-width:none;margin-bottom:28px}
+  [data-main-page="visita"] .split-hero .button-row .btn{min-width:247px;min-height:60px;font-size:21px}
+  [data-main-page="visita"] .split-hero::before,[data-main-page="visita"] .split-hero::after{content:"";position:absolute;top:0;z-index:5}
+  [data-main-page="visita"] .split-hero::before{left:43.6%;width:74px;height:120px;background:#0ebbf1}
+  [data-main-page="visita"] .split-hero::after{right:0;width:65px;height:98px;background:var(--coral)}
+  [data-main-page="visita"] .split-hero .hero-visual::before{left:auto;top:auto;right:164px;bottom:0;width:133px;height:73px;background:#ffd83f}
+  [data-main-page="visita"] .split-hero .hero-visual::after{right:0;bottom:0;width:104px;height:116px;background:#bc82d7}
+  [data-main-page="visita"] .section{padding-top:46px}
+  [data-main-page="visita"] .step{background:transparent;border-top:0!important;display:grid;grid-template-columns:58px 83px 1fr;column-gap:37px;row-gap:12px;align-items:center;padding:0 24px 0 4px;min-height:0}
+  [data-main-page="visita"] .step>div{grid-column:1/-1;padding-left:46px}
+  [data-main-page="visita"] .step .icon-disc{width:83px;height:83px;border:1px solid var(--line);background:#fff}
+  [data-main-page="visita"] .step .icon{width:38px;height:38px}
+  [data-main-page="visita"] .step h3{font-size:23px;margin:0 0 8px}
+  [data-main-page="visita"] .step p{font-size:18px}
+}
