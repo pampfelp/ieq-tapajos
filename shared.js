@@ -29,104 +29,185 @@
     document.body.classList.add('page-swipe-enabled');
     const root=document.documentElement;
     const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
-    const parts=[...document.querySelectorAll('body>.site-header,body>main,body>.site-footer')];
-    const htmlCache=new Map();
-    const peeks=new Map();
-    const builtPeeks=new Map();
-    let activePeek=null,activeIndex=-1,navigating=false,settling=false,drag=null;
-    const pageWidth=()=>root.clientWidth;
+    const headSelector='title,meta[name="description"],link[rel="canonical"],meta[property^="og:"]';
+    const indexOf=url=>{const file=new URL(url,location.href).pathname.split('/').pop()||'index.html';return pageOrder.findIndex(([href])=>href===file);};
     const hrefFor=index=>new URL(pageOrder[index][0],location.href).href;
+    const pageWidth=()=>root.clientWidth;
+    const headNodes=doc=>[...doc.head.querySelectorAll(headSelector)].map(node=>node.cloneNode(true));
+    // O site troca de página sem recarregar: cada página vira um <main> guardado numa moldura fixa ao lado da tela.
+    // O deslize mostra a moldura; ao fim, o <main> dela entra no lugar do atual e o endereço muda com pushState.
+    const pages=new Map();
+    const loading=new Map();
+    const htmlCache=new Map();
+    const scrollByEntry=new Map();
+    let current=pageIndex,liveMain=document.querySelector('body>main'),activePeek=null,activeIndex=-1,busy=false,drag=null,pendingSync=false;
+    liveMain.tabIndex=-1;
+    pages.set(current,{main:liveMain,head:headNodes(document),frame:null});
+    function makeFrame(){
+      const frame=document.createElement('div');
+      frame.className='page-peek';
+      frame.setAttribute('aria-hidden','true');
+      frame.inert=true;
+      const top=header.cloneNode(true);top.removeAttribute('data-site-header');
+      const bottom=footer.cloneNode(true);bottom.removeAttribute('data-site-footer');
+      frame.append(top,bottom);
+      document.body.append(frame);
+      return frame;
+    }
     function loadHtml(index){
       if(!htmlCache.has(index))htmlCache.set(index,fetch(hrefFor(index)).then(response=>response.ok?response.text():null).catch(()=>null));
       return htmlCache.get(index);
     }
-    // A prévia é a outra página montada ao lado da atual, com o mesmo CSS, para o arraste revelar o que vai abrir.
-    function buildPeek(index){
-      if(!peeks.has(index))peeks.set(index,loadHtml(index).then(html=>{
-        const source=html&&new DOMParser().parseFromString(html,'text/html').querySelector('main');
-        if(!source){peeks.delete(index);htmlCache.delete(index);return null;}
-        const peek=document.createElement('div');
-        peek.className='page-peek';
-        peek.setAttribute('aria-hidden','true');
-        peek.inert=true;
-        const top=document.createElement('header');
-        top.className='site-header';
-        top.innerHTML=header?header.innerHTML:'';
-        const body=document.createElement('div');
-        body.dataset.mainPage=source.dataset.mainPage||'';
-        body.innerHTML=source.innerHTML;
-        peek.append(top,body);
-        peek.querySelectorAll('[id]').forEach(el=>{el.dataset.peekId=el.id;el.removeAttribute('id');});
-        document.body.append(peek);
-        builtPeeks.set(index,peek);
+    function loadPage(index){
+      if(pages.has(index))return Promise.resolve(pages.get(index));
+      if(!loading.has(index))loading.set(index,loadHtml(index).then(html=>{
+        loading.delete(index);
+        const doc=html&&new DOMParser().parseFromString(html,'text/html');
+        const main=doc&&doc.querySelector('main');
+        if(!main||main.dataset.mainPage!==pageOrder[index][1]){htmlCache.delete(index);return null;}
+        main.removeAttribute('id');
+        main.tabIndex=-1;
+        const entry={main:document.adoptNode(main),head:headNodes(doc),frame:makeFrame()};
+        entry.frame.insertBefore(entry.main,entry.frame.lastElementChild);
+        pages.set(index,entry);
         applyValues({});
         watchImages();
-        return peek;
+        bindForms();
+        return entry;
       }));
-      return peeks.get(index);
+      return loading.get(index);
     }
     function showPeek(index){
-      const peek=builtPeeks.get(index)||null;
-      if(peek===activePeek)return;
+      const frame=pages.get(index)?.frame||null;
+      if(frame===activePeek)return;
       activePeek?.classList.remove('is-active');
-      activePeek=peek;activeIndex=peek?index:-1;
-      peek?.classList.add('is-active');
+      activePeek=frame;activeIndex=frame?index:-1;
+      frame?.classList.add('is-active');
     }
     function place(offset){
       const transform=offset?`translate3d(${offset}px,0,0)`:'';
-      parts.forEach(el=>{el.style.transform=transform;});
-      if(activePeek)activePeek.style.transform=`translate3d(${offset+(activeIndex>pageIndex?pageWidth():-pageWidth())}px,0,0)`;
+      [header,liveMain,footer].forEach(el=>{if(el)el.style.transform=transform;});
+      if(activePeek)activePeek.style.transform=`translate3d(${offset+(activeIndex>current?pageWidth():-pageWidth())}px,0,0)`;
     }
     function settle(offset){
-      settling=true;
       root.classList.add('is-paging','is-paging-settle');
       place(offset);
-      return new Promise(resolve=>setTimeout(()=>{settling=false;resolve();},reducedMotion.matches?0:360));
+      return new Promise(resolve=>setTimeout(resolve,reducedMotion.matches?0:360));
     }
     function reset(){
       root.classList.remove('is-paging','is-paging-settle');
       place(0);
+      if(activePeek){activePeek.style.transform='';activePeek.scrollTop=0;}
       showPeek(-1);
     }
-    function alignPeek(peek,hash){
-      peek.scrollTop=0;
-      const target=hash&&peek.querySelector(`[data-peek-id="${CSS.escape(decodeURIComponent(hash.slice(1)))}"]`);
-      if(target)peek.scrollTop=target.getBoundingClientRect().top-peek.getBoundingClientRect().top-(parseFloat(getComputedStyle(target).scrollMarginTop)||0);
+    function anchorTop(frame,hash){
+      const target=hash&&frame.querySelector(`[id="${CSS.escape(decodeURIComponent(hash.slice(1)))}"]`);
+      if(!target)return 0;
+      return target.getBoundingClientRect().top-frame.getBoundingClientRect().top+frame.scrollTop-(parseFloat(getComputedStyle(target).scrollMarginTop)||0);
     }
-    function waitImages(peek){
-      const pending=[...peek.querySelectorAll('img[src]')].filter(img=>!img.complete).map(img=>img.decode().catch(()=>{}));
+    function prepare(entry,url){
+      const subject=new URL(url,location.href).searchParams.get('assunto');
+      const message=entry.main.querySelector('[data-contact-form] [name="message"]');
+      if(message&&subject&&/^(Kids|Casais|Jovens|Mulheres)$/.test(subject))message.value=`Olá! Gostaria de saber mais sobre ${subject}.`;
+      const hash=new URL(url,location.href).hash;
+      entry.main.querySelectorAll('.is-target').forEach(el=>el.classList.remove('is-target'));
+      if(hash)entry.main.querySelector(`[id="${CSS.escape(decodeURIComponent(hash.slice(1)))}"]`)?.classList.add('is-target');
+    }
+    function waitImages(container){
+      const pending=[...container.querySelectorAll('img[src]')].filter(img=>!img.complete).map(img=>img.decode().catch(()=>{}));
       return Promise.race([Promise.all(pending),new Promise(resolve=>setTimeout(resolve,450))]);
     }
-    async function navigateTo(index,href){
-      if(navigating||settling||index<0||index>=pageOrder.length||index===pageIndex)return;
-      navigating=true;
-      if(reducedMotion.matches){location.assign(href);return;}
-      const peek=await Promise.race([buildPeek(index),new Promise(resolve=>setTimeout(()=>resolve(null),800))]);
-      if(!peek){location.assign(href);return;}
-      await waitImages(peek);
-      root.classList.remove('is-paging-settle');
-      root.classList.add('is-paging');
-      showPeek(index);
-      alignPeek(peek,new URL(href).hash);
-      place(0);
-      peek.getBoundingClientRect();
-      await settle(index>pageIndex?-pageWidth():pageWidth());
-      location.assign(href);
+    const entryId=()=>history.state&&history.state.ieqt;
+    function saveScroll(){
+      const id=entryId();
+      if(!id)return;
+      scrollByEntry.set(id,window.scrollY);
+      history.replaceState({...history.state,scrollY:window.scrollY},'');
     }
-    window.addEventListener('pageshow',event=>{if(event.persisted){navigating=false;settling=false;reset();}});
-    const warmUp=()=>{[pageIndex-1,pageIndex+1].forEach(index=>{if(index>=0&&index<pageOrder.length)buildPeek(index);});pageOrder.forEach((_,index)=>{if(index!==pageIndex)loadHtml(index);});};
+    function swapTo(index,url,top,push){
+      saveScroll();
+      const leaving=pages.get(current),entering=pages.get(index);
+      leaving.frame=leaving.frame||makeFrame();
+      liveMain.removeAttribute('id');
+      liveMain.style.transform='';
+      liveMain.replaceWith(entering.main);
+      leaving.frame.insertBefore(liveMain,leaving.frame.lastElementChild);
+      liveMain=entering.main;
+      liveMain.id='main';
+      document.head.querySelectorAll(headSelector).forEach(node=>node.remove());
+      document.head.append(...entering.head.map(node=>node.cloneNode(true)));
+      document.body.dataset.page=pageOrder[index][1];
+      document.querySelectorAll('.site-dock a').forEach((link,i)=>{if(i===index)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');});
+      current=index;
+      if(push)history.pushState({ieqt:Math.random().toString(36).slice(2),scrollY:top},'',url);
+      reset();
+      window.scrollTo({top,left:0,behavior:'instant'});
+      liveMain.focus({preventScroll:true});
+      if(window.fbq)window.fbq('track','PageView');
+      warmUp();
+    }
+    async function go(index,url,{push=true,scroll=null,animate=!reducedMotion.matches}={}){
+      if(busy||index<0||index>=pageOrder.length)return;
+      busy=true;
+      const entry=await Promise.race([loadPage(index),new Promise(resolve=>setTimeout(()=>resolve(null),1500))]);
+      if(!entry){if(push)location.assign(url);else location.reload();return;}
+      prepare(entry,url);
+      entry.frame.scrollTop=0;
+      const top=scroll??anchorTop(entry.frame,new URL(url,location.href).hash);
+      if(animate&&index!==current){
+        await waitImages(entry.frame);
+        root.classList.remove('is-paging-settle');
+        root.classList.add('is-paging');
+        showPeek(index);
+        place(0);
+        entry.frame.scrollTop=top;
+        entry.frame.getBoundingClientRect();
+        await settle(index>current?-pageWidth():pageWidth());
+      }
+      swapTo(index,url,top,push);
+      busy=false;
+      if(pendingSync){pendingSync=false;syncToLocation();}
+    }
+    function scrollFor(state){return state&&state.ieqt?(scrollByEntry.get(state.ieqt)??state.scrollY??0):0;}
+    function syncToLocation(event){
+      const index=indexOf(location.href);
+      if(index<0){location.reload();return;}
+      if(index===current)return;
+      if(busy){pendingSync=true;return;}
+      go(index,location.href,{push:false,scroll:scrollFor(history.state),animate:!reducedMotion.matches&&!(event&&event.hasUAVisualTransition)});
+    }
+    function warmUp(){
+      [current-1,current+1].forEach(index=>{if(index>=0&&index<pageOrder.length)loadPage(index);});
+      pageOrder.forEach((_,index)=>{if(!pages.has(index))loadHtml(index);});
+    }
+    history.scrollRestoration='manual';
+    if(!entryId())history.replaceState({...(history.state||{}),ieqt:Math.random().toString(36).slice(2),scrollY:window.scrollY},'');
+    else if(performance.getEntriesByType('navigation')[0]?.type!=='navigate')window.scrollTo({top:history.state.scrollY||0,left:0,behavior:'instant'});
+    prepare(pages.get(current),location.href);
+    let scrollTimer=0;
+    window.addEventListener('scroll',()=>{
+      if(busy||drag)return;
+      const id=entryId();
+      if(!id)return;
+      scrollByEntry.set(id,window.scrollY);
+      clearTimeout(scrollTimer);
+      scrollTimer=setTimeout(()=>{if(!busy&&entryId()===id)history.replaceState({...history.state,scrollY:window.scrollY},'');},200);
+    },{passive:true});
+    window.addEventListener('popstate',syncToLocation);
+    window.addEventListener('hashchange',()=>prepare(pages.get(current),location.href));
+    window.addEventListener('pageshow',event=>{if(event.persisted){busy=false;drag=null;reset();syncToLocation();}});
     if(document.readyState==='complete')setTimeout(warmUp,300);else window.addEventListener('load',()=>setTimeout(warmUp,300),{once:true});
     document.addEventListener('keydown',event=>{
       if(window.innerWidth<=800||event.repeat||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||!['ArrowLeft','ArrowRight'].includes(event.key))return;
       if(event.target instanceof Element&&event.target.closest('input,textarea,select,button,[contenteditable],[role="textbox"]'))return;
-      const next=pageIndex+(event.key==='ArrowRight'?1:-1);
+      const next=current+(event.key==='ArrowRight'?1:-1);
       if(next<0||next>=pageOrder.length)return;
       event.preventDefault();
-      navigateTo(next,hrefFor(next));
+      go(next,hrefFor(next));
     });
     document.addEventListener('touchstart',event=>{
       drag=null;
-      if(navigating||settling||window.innerWidth>800||event.touches.length!==1||event.target.closest('button,input,textarea,select,label,[contenteditable],iframe'))return;
+      if(busy||window.innerWidth>800||event.touches.length!==1||event.target.closest('button,input,textarea,select,label,[contenteditable],iframe'))return;
       const touch=event.touches[0];
       if(touch.clientX<25||touch.clientX>window.innerWidth-25)return;
       drag={x:touch.clientX,y:touch.clientY,axis:null,offset:0,lastX:touch.clientX,lastTime:event.timeStamp,speed:0};
@@ -145,10 +226,10 @@
       const elapsed=event.timeStamp-drag.lastTime;
       if(elapsed>0)drag.speed=(touch.clientX-drag.lastX)/elapsed;
       drag.lastX=touch.clientX;drag.lastTime=event.timeStamp;
-      const target=pageIndex+(deltaX<0?1:-1);
+      const target=current+(deltaX<0?1:-1);
       const inRange=target>=0&&target<pageOrder.length;
+      if(inRange&&pages.has(target)&&activeIndex!==target){prepare(pages.get(target),hrefFor(target));pages.get(target).frame.scrollTop=0;}
       showPeek(inRange?target:-1);
-      if(activePeek?.scrollTop)activePeek.scrollTop=0;
       drag.offset=inRange?deltaX:deltaX*.25;
       place(drag.offset);
     },{passive:false});
@@ -156,27 +237,32 @@
       const done=drag;drag=null;
       if(!done||done.axis!=='x')return;
       const width=pageWidth();
-      const target=pageIndex+(done.offset<0?1:-1);
+      const target=current+(done.offset<0?1:-1);
       const fast=Math.abs(done.offset)>40&&Math.abs(done.speed)>.45&&Math.sign(done.speed)===Math.sign(done.offset);
+      busy=true;
       if(!cancelled&&activePeek&&activeIndex===target&&(Math.abs(done.offset)>width*.3||fast)){
-        navigating=true;
-        settle(done.offset<0?-width:width).then(()=>location.assign(hrefFor(target)));
-      }else settle(0).then(reset);
+        settle(done.offset<0?-width:width).then(()=>{swapTo(target,hrefFor(target),0,true);busy=false;if(pendingSync){pendingSync=false;syncToLocation();}});
+      }else settle(0).then(()=>{reset();busy=false;if(pendingSync){pendingSync=false;syncToLocation();}});
     }
     document.addEventListener('touchend',()=>endDrag(false),{passive:true});
     document.addEventListener('touchcancel',()=>endDrag(true),{passive:true});
     document.addEventListener('click',event=>{
-      if(navigating||settling){event.preventDefault();return;}
+      if(busy){event.preventDefault();return;}
       if(event.defaultPrevented||event.button!==0||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey)return;
       const anchor=event.target.closest('a[href]');
       if(!anchor||anchor.target||anchor.hasAttribute('download'))return;
       const destination=new URL(anchor.href);
       if(destination.origin!==location.origin)return;
-      const file=destination.pathname.split('/').pop()||'index.html';
-      const index=pageOrder.findIndex(([href])=>href===file);
-      if(index<0||index===pageIndex)return;
+      const index=indexOf(destination.href);
+      if(index<0)return;
+      if(index===current){
+        if(destination.hash)return;
+        event.preventDefault();
+        window.scrollTo({top:0,behavior:reducedMotion.matches?'instant':'smooth'});
+        return;
+      }
       event.preventDefault();
-      navigateTo(index,destination.href);
+      go(index,destination.href);
     });
   }
   let values = content;
@@ -245,25 +331,30 @@
     installBanner.querySelector('[data-install-close]').addEventListener('click',()=>{localStorage.setItem('ieqt_install_dismissed_v1','1');installBanner.classList.remove('is-visible');});
     if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
   }
-  const form=document.querySelector('[data-contact-form]');
-  if(form){
-    const status=form.querySelector('.form-status');
-    const endpoint=config.formEndpoint;
-    form.addEventListener('submit',async event=>{
-      event.preventDefault();
-      status.textContent='';status.dataset.kind='';
-      if(!form.reportValidity())return;
-      const contactValue=form.elements.contact.value.trim();
-      if(!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactValue)||/^\+?[\d\s()-]{8,20}$/.test(contactValue))){status.textContent='Informe um telefone ou e-mail válido.';status.dataset.kind='error';form.elements.contact.focus();return;}
-      if(form.elements.website.value)return;
-      if(!endpoint){status.textContent='O envio pelo site ainda está sendo configurado. Fale com a gente pelo WhatsApp.';status.dataset.kind='error';return;}
-      const button=form.querySelector('button[type=submit]');button.disabled=true;button.textContent='Enviando...';
-      const payload={name:form.elements.name.value.trim(),contact:form.elements.contact.value.trim(),message:form.elements.message.value.trim(),consent:form.elements.consent.checked,website:form.elements.website.value,startedAt:Number(form.elements.startedAt.value),token:form.elements['cf-turnstile-response']?.value||''};
-      try{const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.error||'Falha no envio');status.textContent='Mensagem enviada. A igreja entrará em contato pelo dado informado.';status.dataset.kind='ok';form.reset();form.elements.startedAt.value=Date.now();}
-      catch(_){status.textContent='Não foi possível enviar agora. Tente o WhatsApp da igreja.';status.dataset.kind='error';}
-      finally{button.disabled=false;button.textContent='Enviar mensagem';}
+  // Liga o formulário de contato onde ele estiver, inclusive quando a página entra sem recarregar.
+  function bindForms(){
+    document.querySelectorAll('[data-contact-form]').forEach(form=>{
+      if(form.dataset.bound)return;
+      form.dataset.bound='1';
+      const status=form.querySelector('.form-status');
+      const endpoint=config.formEndpoint;
+      form.addEventListener('submit',async event=>{
+        event.preventDefault();
+        status.textContent='';status.dataset.kind='';
+        if(!form.reportValidity())return;
+        const contactValue=form.elements.contact.value.trim();
+        if(!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactValue)||/^\+?[\d\s()-]{8,20}$/.test(contactValue))){status.textContent='Informe um telefone ou e-mail válido.';status.dataset.kind='error';form.elements.contact.focus();return;}
+        if(form.elements.website.value)return;
+        if(!endpoint){status.textContent='O envio pelo site ainda está sendo configurado. Fale com a gente pelo WhatsApp.';status.dataset.kind='error';return;}
+        const button=form.querySelector('button[type=submit]');button.disabled=true;button.textContent='Enviando...';
+        const payload={name:form.elements.name.value.trim(),contact:form.elements.contact.value.trim(),message:form.elements.message.value.trim(),consent:form.elements.consent.checked,website:form.elements.website.value,startedAt:Number(form.elements.startedAt.value),token:form.elements['cf-turnstile-response']?.value||''};
+        try{const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});const result=await response.json();if(!response.ok||!result.ok)throw new Error(result.error||'Falha no envio');status.textContent='Mensagem enviada. A igreja entrará em contato pelo dado informado.';status.dataset.kind='ok';form.reset();form.elements.startedAt.value=Date.now();}
+        catch(_){status.textContent='Não foi possível enviar agora. Tente o WhatsApp da igreja.';status.dataset.kind='error';}
+        finally{button.disabled=false;button.textContent='Enviar mensagem';}
+      });
+      form.elements.startedAt.value=Date.now();
+      if(config.turnstileSiteKey){const slot=form.querySelector('[data-turnstile]');if(slot){slot.className='cf-turnstile';slot.dataset.sitekey=config.turnstileSiteKey;if(window.turnstile)window.turnstile.render(slot);else if(!document.querySelector('script[src*="challenges.cloudflare.com"]')){const script=document.createElement('script');script.src='https://challenges.cloudflare.com/turnstile/v0/api.js';script.async=true;document.head.append(script);}}}
     });
-    form.elements.startedAt.value=Date.now();
-    if(config.turnstileSiteKey){const slot=form.querySelector('[data-turnstile]');if(slot){slot.className='cf-turnstile';slot.dataset.sitekey=config.turnstileSiteKey;const script=document.createElement('script');script.src='https://challenges.cloudflare.com/turnstile/v0/api.js';script.async=true;document.head.append(script);}}
   }
+  bindForms();
 })();

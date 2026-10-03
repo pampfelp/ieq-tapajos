@@ -10,6 +10,7 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   const browser = await chromium.launch({ headless: true, executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe' });
   const desktop = await browser.newContext({ viewport: { width: 1487, height: 1058 }, serviceWorkers: 'block' });
   const page = await desktop.newPage();
+  desktop.setDefaultTimeout(8000);
 
   await page.goto(base + 'index.html');
   await peeksReady(page);
@@ -50,8 +51,54 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   await wait(400);
   assert.match(page.url(), /visita\.html$/);
 
+  // Trocar de página não recarrega; voltar e avançar usam o histórico e devolvem a rolagem.
+  await page.goto(base + 'index.html');
+  await peeksReady(page);
+  await page.evaluate(() => { window.__semRecarga = 1; window.scrollTo({ top: 700, behavior: 'instant' }); });
+  await wait(300);
+  await page.keyboard.press('ArrowRight');
+  await page.waitForURL('**/horarios.html');
+  await wait(100);
+  assert.equal(await page.evaluate(() => window.scrollY), 0);
+  assert.equal(await page.title(), 'Horários dos cultos — IEQ Tapajós');
+  assert.equal(await page.locator('main#main').getAttribute('data-main-page'), 'horarios');
+  assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), 'https://pampfelp.github.io/ieq-tapajos/horarios.html');
+  assert.equal(await page.locator('.site-dock a[aria-current="page"]').getAttribute('href'), './horarios.html');
+  await page.goBack();
+  await page.waitForURL('**/index.html');
+  await wait(500);
+  assert.equal(await page.evaluate(() => window.scrollY), 700);
+  assert.equal(await page.title(), 'IEQ Tapajós — Uma casa para viver a fé');
+  await page.goForward();
+  await page.waitForURL('**/horarios.html');
+  await wait(500);
+  assert.equal(await page.locator('main#main').getAttribute('data-main-page'), 'horarios');
+  await page.goBack();
+  await page.waitForURL('**/index.html');
+  await wait(500);
+
+  // Link com âncora abre já no cartão destacado; o pedido de participação preenche a mensagem.
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await page.locator('main#main .tile-kids').click();
+  await page.waitForURL('**/ministerios.html#kids');
+  await wait(500);
+  assert.equal(await page.locator('#kids').evaluate(el => el.classList.contains('is-target')), true);
+  assert.ok(Math.abs(await page.locator('#kids').evaluate(el => el.getBoundingClientRect().top) - 28) <= 2, 'rolou até o cartão');
+  await page.locator('main#main a[href*="assunto=Kids"]').click();
+  await page.waitForURL('**/contato.html?assunto=Kids');
+  await wait(500);
+  assert.equal(await page.locator('#message').inputValue(), 'Olá! Gostaria de saber mais sobre Kids.');
+  await page.locator('.site-dock a[href="./contato.html"]').click();
+  await wait(300);
+  assert.match(page.url(), /contato\.html\?assunto=Kids$/);
+  assert.equal(await page.evaluate(() => window.__semRecarga), 1);
+  await page.reload();
+  assert.equal(await page.locator('main#main').getAttribute('data-main-page'), 'contato');
+  assert.equal(await page.locator('#message').inputValue(), 'Olá! Gostaria de saber mais sobre Kids.');
+
   const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, serviceWorkers: 'block' });
   const phone = await mobile.newPage();
+  mobile.setDefaultTimeout(8000);
   const touch = await mobile.newCDPSession(phone);
   const point = (x, y) => ({ touchPoints: [{ x, y }] });
   async function press(x, y) { await touch.send('Input.dispatchTouchEvent', { type: 'touchStart', ...point(x, y) }); }
@@ -87,6 +134,8 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   await wait(150);
   assert.deepEqual(await dockRect(phone), phoneDock);
   await phone.waitForURL('**/horarios.html');
+  await wait(100);
+  assert.deepEqual(await dockRect(phone), phoneDock);
 
   await swipe(190, 180, 175, 480);
   await wait(450);
@@ -116,7 +165,7 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   // No fim da página, a pílula fica abaixo do último texto do rodapé.
   await phone.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
   await wait(200);
-  const footerTextBottom = await phone.locator('.footer-bottom').evaluate(el => el.getBoundingClientRect().bottom);
+  const footerTextBottom = await phone.locator('body>.site-footer .footer-bottom').evaluate(el => el.getBoundingClientRect().bottom);
   assert.ok(footerTextBottom <= (await dockRect(phone)).top, 'rodapé termina acima da pílula');
 
   const reduced = await browser.newContext({ viewport: { width: 1487, height: 1058 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
@@ -126,5 +175,5 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   await noMotion.waitForURL('**/horarios.html');
 
   await browser.close();
-  console.log('Setas, pílula fixa, prévia no arraste, limites, campo de texto, gestos horizontal/vertical, rodapé e movimento reduzido: OK.');
+  console.log('Sem recarregar, voltar/avançar com rolagem, âncora, assunto, F5, setas, pílula fixa, prévia no arraste, limites, campo de texto, gestos horizontal/vertical, rodapé e movimento reduzido: OK.');
 })().catch(error => { console.error(error); process.exitCode = 1; });
