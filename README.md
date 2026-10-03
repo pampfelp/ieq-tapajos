@@ -28,3 +28,5 @@ Clique em `TESTAR - index.html.bat` para a home ou em `TESTAR - admin.html.bat` 
 7. Felipe testa em dispositivos reais, inclusive envio de contato e instalação.
 
 Os testes locais automatizados estão em `scripts/`: `visual-check.cjs`, `interaction-check.cjs` e `pwa-check.cjs`. Eles usam o Edge instalado nesta máquina.
+
+Ao mudar `config.js`, `content.js`, `shared.js` ou `style.css`, atualize as versões `?v=` dos HTMLs e o nome do cache em `service-worker.js` antes de publicar. Sem isso, quem instalou o site pode continuar vendo a configuração antiga.
