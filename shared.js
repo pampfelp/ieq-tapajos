@@ -4,24 +4,26 @@
   const config = window.IEQ_CONFIG || {};
   const icon = (name) => `<svg class="icon" aria-hidden="true"><use href="./assets/icons.svg#${name}"></use></svg>`;
   const nav = [
-    ['index.html','A igreja','home'],['horarios.html','Horários','horarios'],
-    ['ministerios.html','Ministérios','ministerios'],['localizacao.html','Localização','localizacao'],
-    ['contato.html','Contato','contato']
+    ['index.html','A igreja','home','house'],['horarios.html','Horários','horarios','calendar'],
+    ['ministerios.html','Ministérios','ministerios','people'],['localizacao.html','Localização','localizacao','pin'],
+    ['contato.html','Contato','contato','message'],['visita.html','Visita','visita','door']
   ];
   const page = document.body.dataset.page || '';
   const header = document.querySelector('[data-site-header]');
   if (header) {
-    const links = nav.map(([href,label,key]) => `<a href="./${href}"${page===key?' aria-current="page"':''}>${label}</a>`).join('');
-    header.innerHTML = `<a class="skip-link" href="#main">Pular para o conteúdo</a><div class="nav-shell"><a class="brand" href="./index.html" aria-label="IEQ Tapajós, página inicial"><img src="./assets/logo-web.svg" width="322" height="122" alt="IEQ Tapajós, Pr. Manoel e Pra. Nete Siqueira"></a><nav class="desktop-nav" aria-label="Navegação principal">${links}</nav><a class="btn btn-primary header-cta" href="./visita.html">Venha nos visitar</a><button class="menu-toggle" type="button" aria-controls="mobile-nav" aria-expanded="false">${icon('menu')} Menu</button></div><nav class="mobile-nav" id="mobile-nav" aria-label="Navegação no celular">${links}<a class="btn btn-primary" href="./visita.html">Venha nos visitar</a></nav>`;
-    const toggle = header.querySelector('.menu-toggle');
-    toggle.addEventListener('click', () => { const open=toggle.getAttribute('aria-expanded')==='true'; toggle.setAttribute('aria-expanded', String(!open)); header.querySelector('.mobile-nav').classList.toggle('is-open',!open); });
+    header.innerHTML = `<a class="skip-link" href="#main">Pular para o conteúdo</a><div class="nav-shell"><a class="brand" href="./index.html" aria-label="IEQ Tapajós, página inicial"><img src="./assets/logo-original.png" width="1254" height="1254" alt=""><span class="brand-copy"><strong>TAPAJÓS</strong><small>Pr. Manoel &amp; Pra. Nete Siqueira</small></span></a><a class="btn btn-primary header-cta" href="./visita.html">Venha nos visitar</a></div>`;
+    const dock = document.createElement('nav');
+    dock.className = 'site-dock';
+    dock.setAttribute('aria-label','Páginas do site');
+    dock.innerHTML = nav.map(([href,label,key,symbol]) => `<a href="./${href}"${page===key?' aria-current="page"':''} aria-label="${label}">${icon(symbol)}<span>${label}</span></a>`).join('');
+    document.body.append(dock);
   }
   const footer = document.querySelector('[data-site-footer]');
-  if (footer) footer.innerHTML = `<div class="container footer-grid"><div><a class="brand" href="./index.html"><img src="./assets/logo-web.svg" width="322" height="122" alt="IEQ Tapajós"></a><p>Uma casa para viver a fé no Conjunto Tapajós.</p><p>Pr. Manoel e Pra. Nete Siqueira</p></div><div><h3>Encontre seu caminho</h3><a href="./horarios.html">Horários</a><a href="./ministerios.html">Ministérios</a><a href="./localizacao.html">Localização</a><a href="./visita.html">Primeira visita</a></div><div><h3>Fale com a gente</h3><p data-content="address">${content.address}</p><a data-whatsapp href="#">WhatsApp</a><a data-instagram href="#">Instagram</a><a href="./contato.html">Deixe seu contato</a></div></div><div class="container footer-bottom"><span>© <span data-year></span> IEQ Tapajós. Todos os direitos reservados.</span><a href="./privacidade.html">Privacidade e cookies</a></div>`;
+  if (footer) footer.innerHTML = `<div class="container footer-grid"><div><a class="brand" href="./index.html"><img src="./assets/logo-original.png" width="1254" height="1254" alt=""><span class="brand-copy"><strong>TAPAJÓS</strong><small>Pr. Manoel &amp; Pra. Nete Siqueira</small></span></a><p>Uma casa para viver a fé no Conjunto Tapajós.</p><p>Pr. Manoel e Pra. Nete Siqueira</p></div><div><h3>Encontre seu caminho</h3><a href="./horarios.html">Horários</a><a href="./ministerios.html">Ministérios</a><a href="./localizacao.html">Localização</a><a href="./visita.html">Primeira visita</a></div><div><h3>Fale com a gente</h3><p data-content="address">${content.address}</p><a data-whatsapp href="#">WhatsApp</a><a data-instagram href="#">Instagram</a><a href="./contato.html">Deixe seu contato</a></div></div><div class="container footer-bottom"><span>© <span data-year></span> IEQ Tapajós. Todos os direitos reservados.</span><a href="./privacidade.html">Privacidade e cookies</a></div>`;
   document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
   const params = new URLSearchParams(location.search);
   const previewMode=params.get('preview')==='1';
-  const pageOrder=[...nav.map(([href,,key])=>[href,key]),['visita.html','visita']];
+  const pageOrder=nav.map(([href,,key])=>[href,key]);
   const pageIndex=pageOrder.findIndex(([,key])=>key===page);
   if(pageIndex>=0&&!previewMode){
     document.body.classList.add('page-swipe-enabled');
@@ -125,8 +127,7 @@
       imageKeys.forEach(key=>onSnapshot(doc(db,'site_images',key),snapshot=>{applyValues({[key]:snapshot.exists()?snapshot.data().src:content[key]});},()=>{}));
     }).catch(()=>{});
   }
-  const floating=document.querySelector('[data-floating-contact]');
-  if(floating)floating.innerHTML=icon('message');
+  document.querySelector('[data-floating-contact]')?.remove();
   const consentKey='ieqt_analytics_consent_v1';
   const trackingConfigured=Boolean(config.analyticsId||config.metaPixelId);
   const consent=localStorage.getItem(consentKey);

@@ -5,7 +5,7 @@ const { chromium } = require('C:/Users/Camille Oliveira/.cache/codex-runtimes/co
   const page=await context.newPage();
   const cdp=await context.newCDPSession(page);
   await cdp.send('Page.enable');
-  await page.goto('http://localhost:8765/index.html',{waitUntil:'networkidle'});
+  await page.goto('http://localhost:8765/index.html',{waitUntil:'domcontentloaded'});
   await page.evaluate(()=>navigator.serviceWorker.ready);
   const manifest=await cdp.send('Page.getAppManifest');
   const install=await cdp.send('Page.getInstallabilityErrors');

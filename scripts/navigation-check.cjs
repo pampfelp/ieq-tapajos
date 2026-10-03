@@ -24,7 +24,7 @@ const base = 'http://localhost:8765/';
   await page.waitForURL('**/index.html');
   assert.equal(await page.locator('body').evaluate(el => el.classList.contains('page-enter-backward')), true);
 
-  await page.locator('.desktop-nav a[href="./ministerios.html"]').click({ noWaitAfter: true });
+  await page.locator('.site-dock a[href="./ministerios.html"]').click({ noWaitAfter: true });
   assert.equal(await page.locator('body').evaluate(el => el.classList.contains('page-leave-forward')), true);
   await page.waitForURL('**/ministerios.html');
   await page.keyboard.press('ArrowRight');
