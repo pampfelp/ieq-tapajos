@@ -365,3 +365,9 @@ html.is-paging-settle .page-peek.is-active,html.is-paging-settle body>:is(.site-
 .form-intro p{margin:0 0 26px;color:var(--muted);font-size:17px}
 @media(min-width:1121px){.form-intro{display:none}}
 @media(max-width:800px){.contact-visual{height:auto}}
+
+/* Mapa real do Google atrás do pino da IEQT; a ponta do pino marca o endereço, no centro do mapa. */
+.map-card iframe{display:block;position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
+/* Compensa a rotação do pino para a ponta cair no centro do mapa, onde está o endereço. */
+.map-card .map-pin{--pin:123px;width:var(--pin);height:var(--pin);left:calc(50% + var(--pin)*.2093);top:calc(50% - var(--pin)*1.2037)}
+@media(max-width:800px){.map-card .map-pin{--pin:108px}}

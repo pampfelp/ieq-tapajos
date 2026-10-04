@@ -38,6 +38,8 @@ window.IEQ_CONTENT = {
   sunday_third: 'Culto de Missões',
   sunday_last: 'Celebração de Células',
   address: 'R. Anhembi, 36 - Tapanã, Belém - PA, 66833-310',
+  // Ponto do nº 36 da R. Anhembi no Google Maps (o OpenStreetMap marca a 8 m dali); o mapa fica centrado nele e o pino da IEQT marca o centro.
+  map_coords: '-1.3404743,-48.4588848',
   whatsapp: '5591982808543',
   instagram: 'ieqtapajos'
 };

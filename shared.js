@@ -146,6 +146,7 @@
       if(push)history.pushState({ieqt:Math.random().toString(36).slice(2),scrollY:top},'',url);
       reset();
       window.scrollTo({top,left:0,behavior:'instant'});
+      syncMaps();
       liveMain.focus({preventScroll:true});
       if(window.fbq)window.fbq('track','PageView');
       warmUp();
@@ -293,7 +294,7 @@
     document.querySelectorAll('[data-instagram]').forEach(el=>{el.href=`https://www.instagram.com/${encodeURIComponent(values.instagram||content.instagram)}/`;el.target='_blank';el.rel='noopener noreferrer';if(el.hasAttribute('data-edit-target'))el.textContent=`@${values.instagram||content.instagram}`;});
     document.querySelectorAll('[data-carousel]').forEach(syncCarousel);
     document.querySelectorAll('[data-route]').forEach(el=>{el.href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(values.address||content.address)}`;el.target='_blank';el.rel='noopener noreferrer';});
-    document.querySelectorAll('[data-map]').forEach(el=>{el.src=`https://www.google.com/maps?q=${encodeURIComponent(values.address||content.address)}&output=embed`;});
+    syncMaps();
   }
   // Carrossel dos ministérios: a rolagem é nativa com encaixe; setas e pontos só acompanham a posição.
   function syncCarousel(carousel){
@@ -314,6 +315,11 @@
     track.scrollBy({left:(button.hasAttribute('data-carousel-next')?1:-1)*track.clientWidth,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   });
   document.addEventListener('scroll',event=>{const carousel=event.target instanceof Element&&event.target.closest('[data-carousel]');if(carousel)syncCarousel(carousel);},true);
+  // O mapa do Google só carrega na página aberta: um iframe recarrega ao mudar de lugar, então nas molduras do deslize ele fica vazio.
+  function syncMaps(){
+    const url=`https://maps.google.com/maps?ll=${encodeURIComponent(content.map_coords)}&z=17&t=m&hl=pt-BR&output=embed`;
+    document.querySelectorAll('[data-map]').forEach(el=>{if(el.closest('.page-peek'))el.removeAttribute('src');else if(el.getAttribute('src')!==url)el.src=url;});
+  }
   applyValues(values);
   window.IEQ_APPLY_VALUES = applyValues;
   window.addEventListener('message', event=>{if(event.origin===location.origin&&event.data?.type==='ieqt-preview'&&event.data.values)applyValues(event.data.values);});

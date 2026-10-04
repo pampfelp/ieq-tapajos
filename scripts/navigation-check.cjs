@@ -39,8 +39,13 @@ const peeksReady = page => page.waitForFunction(() => document.querySelectorAll(
   await page.waitForURL('**/ministerios.html');
   await page.keyboard.press('ArrowRight');
   await page.waitForURL('**/localizacao.html');
+  // O mapa do Google só carrega na página aberta; nas molduras do deslize o iframe fica vazio.
+  await wait(100);
+  assert.match(await page.locator('body>main .map-card iframe').getAttribute('src'), /maps\.google\.com\/maps\?ll=/);
   await page.keyboard.press('ArrowRight');
   await page.waitForURL('**/contato.html');
+  await wait(100);
+  assert.equal(await page.locator('.page-peek .map-card iframe').getAttribute('src'), null);
 
   await page.locator('#name').focus();
   await page.keyboard.press('ArrowRight');
